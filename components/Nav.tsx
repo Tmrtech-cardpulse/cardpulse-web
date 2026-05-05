@@ -1,37 +1,63 @@
+"use client";
+import { useState, useEffect } from "react";
+
 export default function Nav() {
+  const [scrolled, setScrolled] = useState(false);
+
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 20);
+    window.addEventListener("scroll", onScroll);
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
   return (
     <nav style={{
-      position: 'fixed', top: 0, left: 0, right: 0, zIndex: 50,
-      background: 'rgba(10,10,26,0.85)', backdropFilter: 'blur(12px)',
-      borderBottom: '1px solid rgba(255,255,255,0.06)',
+      position: "fixed", top: 0, left: 0, right: 0, zIndex: 100,
+      background: scrolled ? "rgba(13,15,28,0.92)" : "transparent",
+      backdropFilter: scrolled ? "blur(20px)" : "none",
+      borderBottom: scrolled ? "1px solid #252A45" : "1px solid transparent",
+      transition: "all 0.3s ease",
     }}>
       <div style={{
-        maxWidth: 1100, margin: '0 auto', padding: '0 24px',
-        height: 60, display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+        maxWidth: 1120, margin: "0 auto", padding: "0 28px",
+        height: 64, display: "flex", alignItems: "center", justifyContent: "space-between",
       }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+        {/* Logo */}
+        <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
           <div style={{
-            width: 30, height: 30, borderRadius: 8,
-            background: 'linear-gradient(135deg, #4F8EF7, #7B5EF7)',
-            display: 'flex', alignItems: 'center', justifyContent: 'center',
-            fontSize: 16, fontWeight: 800, color: '#fff',
+            width: 34, height: 34, borderRadius: 10,
+            background: "linear-gradient(135deg, #4F8EF7 0%, #7B5EF7 100%)",
+            display: "flex", alignItems: "center", justifyContent: "center",
+            fontSize: 17, fontWeight: 900, color: "#fff",
+            boxShadow: "0 4px 14px rgba(79,142,247,0.4)",
           }}>⚡</div>
-          <span style={{ fontWeight: 700, fontSize: 17, color: '#f0f0ff', letterSpacing: '-0.3px' }}>
+          <span style={{ fontWeight: 800, fontSize: 18, color: "#FFFFFF", letterSpacing: "-0.4px" }}>
             CardPulse
           </span>
         </div>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 24 }}>
-          <a href="#features" style={{ color: '#a0a0c0', fontSize: 14, textDecoration: 'none' }}>Features</a>
-          <a href="#how-it-works" style={{ color: '#a0a0c0', fontSize: 14, textDecoration: 'none' }}>How it works</a>
-          <a href="#pricing" style={{ color: '#a0a0c0', fontSize: 14, textDecoration: 'none' }}>Pricing</a>
-          <a
-            href="#download"
-            style={{
-              background: '#4F8EF7', color: '#fff', padding: '8px 18px',
-              borderRadius: 8, fontSize: 14, fontWeight: 600, textDecoration: 'none',
+
+        {/* Links */}
+        <div style={{ display: "flex", alignItems: "center", gap: 32 }}>
+          {[["#features", "Features"], ["#how-it-works", "How it works"], ["#pricing", "Pricing"]].map(([href, label]) => (
+            <a key={href} href={href} style={{
+              color: "#8B90AA", fontSize: 14, fontWeight: 500,
+              transition: "color 0.2s",
             }}
+              onMouseEnter={e => (e.currentTarget.style.color = "#FFFFFF")}
+              onMouseLeave={e => (e.currentTarget.style.color = "#8B90AA")}
+            >{label}</a>
+          ))}
+          <a href="#download" style={{
+            background: "linear-gradient(135deg, #4F8EF7, #7B5EF7)",
+            color: "#fff", padding: "9px 20px",
+            borderRadius: 10, fontSize: 14, fontWeight: 700,
+            boxShadow: "0 4px 14px rgba(79,142,247,0.35)",
+            transition: "opacity 0.2s",
+          }}
+            onMouseEnter={e => (e.currentTarget.style.opacity = "0.85")}
+            onMouseLeave={e => (e.currentTarget.style.opacity = "1")}
           >
-            Download
+            Download free
           </a>
         </div>
       </div>

@@ -1,87 +1,125 @@
+"use client";
 const FEATURES = [
   {
-    icon: '📸',
-    title: 'AI Card Scanning',
-    desc: 'Point your camera at any card. Our AI identifies the player, year, set, and variant in seconds — no typing required.',
-    badge: 'Premium',
+    icon: "📸",
+    title: "AI Card Scanning",
+    desc: "Point your camera at any card. Our AI reads the player, year, set, and variant instantly — no typing, no guessing.",
+    badge: "Premium",
+    color: "#4F8EF7",
   },
   {
-    icon: '💰',
-    title: 'Live eBay Pricing',
-    desc: 'See real sold prices from eBay the moment you scan. Know exactly what your card is worth on the open market today.',
+    icon: "💰",
+    title: "Live eBay Pricing",
+    desc: "Real sold prices from eBay the moment you scan. Graded vs raw, PSA 10 vs PSA 9 — broken down clearly.",
     badge: null,
+    color: "#30D158",
   },
   {
-    icon: '📊',
-    title: 'Portfolio P&L',
-    desc: 'Track every card\'s purchase price against current market value. See your total collection value and profit at a glance.',
-    badge: 'Premium',
+    icon: "📊",
+    title: "Portfolio P&L",
+    desc: "Track every card's purchase price against today's market value. See your total collection worth and profit at a glance.",
+    badge: "Premium",
+    color: "#4F8EF7",
   },
   {
-    icon: '🔔',
-    title: 'Price Alerts',
-    desc: 'Set a target price on any card and get a push notification the moment the market hits it. Never miss the right moment to sell.',
-    badge: 'Premium',
+    icon: "🔔",
+    title: "Price Alerts",
+    desc: "Set a target price on any card. Get a push notification the moment the market hits it. Never miss the right time to sell.",
+    badge: "Premium",
+    color: "#FF9F0A",
   },
   {
-    icon: '📰',
-    title: 'Discover',
-    desc: 'Sports card news, upcoming product releases, and UK collector events — all in one place, updated daily.',
+    icon: "📰",
+    title: "Discover",
+    desc: "Sports card news, upcoming product releases, and UK collector events — updated daily, all in one place.",
     badge: null,
+    color: "#BF5AF2",
   },
   {
-    icon: '⚡',
-    title: 'CardPulse Score',
-    desc: 'Every card gets a 0–100 demand score based on market velocity, price trend, and grading premium. Know what\'s hot.',
-    badge: 'Premium',
+    icon: "⚡",
+    title: "CardPulse Score",
+    desc: "Every card gets a 0–100 demand score based on market velocity, price trend, and grading premium. Know what's hot.",
+    badge: "Premium",
+    color: "#4F8EF7",
   },
 ];
 
 export default function Features() {
   return (
-    <section id="features" style={{
-      padding: '100px 24px',
-      background: 'rgba(255,255,255,0.01)',
-    }}>
-      <div style={{ maxWidth: 1100, margin: '0 auto' }}>
-        <div style={{ textAlign: 'center', marginBottom: 64 }}>
-          <p style={{ color: '#4F8EF7', fontWeight: 700, fontSize: 13, textTransform: 'uppercase', letterSpacing: 1, marginBottom: 12 }}>
-            Everything you need
-          </p>
-          <h2 style={{ fontSize: 'clamp(28px, 4vw, 44px)', fontWeight: 800, letterSpacing: '-0.5px', color: '#f0f0ff', marginBottom: 16 }}>
+    <section id="features" style={{ padding: "100px 28px" }}>
+      <div style={{ maxWidth: 1120, margin: "0 auto" }}>
+
+        {/* Heading */}
+        <div style={{ textAlign: "center", marginBottom: 64 }}>
+          <div style={{
+            display: "inline-block",
+            background: "rgba(79,142,247,0.10)", border: "1px solid rgba(79,142,247,0.2)",
+            borderRadius: 100, padding: "5px 14px", marginBottom: 16,
+          }}>
+            <span style={{ color: "#4F8EF7", fontSize: 12, fontWeight: 700, textTransform: "uppercase", letterSpacing: 1 }}>
+              Features
+            </span>
+          </div>
+          <h2 style={{
+            fontSize: "clamp(30px, 4vw, 46px)", fontWeight: 900,
+            letterSpacing: "-1px", color: "#FFFFFF", marginBottom: 16, lineHeight: 1.1,
+          }}>
             Built for serious collectors
           </h2>
-          <p style={{ color: '#a0a0c0', fontSize: 17, maxWidth: 520, margin: '0 auto' }}>
-            From your first scan to a portfolio worth tracking — CardPulse has every tool you need.
+          <p style={{ color: "#8B90AA", fontSize: 17, maxWidth: 480, margin: "0 auto", lineHeight: 1.6 }}>
+            From your first scan to a portfolio worth tracking — every tool you need in one app.
           </p>
         </div>
 
+        {/* Grid */}
         <div style={{
-          display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
-          gap: 20,
+          display: "grid",
+          gridTemplateColumns: "repeat(auto-fit, minmax(320px, 1fr))",
+          gap: 16,
         }}>
           {FEATURES.map(f => (
             <div key={f.title} style={{
-              background: '#12122a',
-              border: '1px solid #2a2a4a',
-              borderRadius: 16,
+              background: "#161827",
+              border: "1px solid #252A45",
+              borderRadius: 20,
               padding: 28,
-              position: 'relative',
-            }}>
+              position: "relative",
+              transition: "border-color 0.2s, transform 0.2s",
+            }}
+              onMouseEnter={e => {
+                (e.currentTarget as HTMLDivElement).style.borderColor = "rgba(79,142,247,0.35)";
+                (e.currentTarget as HTMLDivElement).style.transform = "translateY(-2px)";
+              }}
+              onMouseLeave={e => {
+                (e.currentTarget as HTMLDivElement).style.borderColor = "#252A45";
+                (e.currentTarget as HTMLDivElement).style.transform = "translateY(0)";
+              }}
+            >
               {f.badge && (
                 <span style={{
-                  position: 'absolute', top: 20, right: 20,
-                  background: 'rgba(79,142,247,0.12)', color: '#4F8EF7',
-                  fontSize: 10, fontWeight: 700, padding: '3px 8px', borderRadius: 5,
-                  textTransform: 'uppercase', letterSpacing: 0.5,
+                  position: "absolute", top: 20, right: 20,
+                  background: "rgba(79,142,247,0.10)", color: "#4F8EF7",
+                  fontSize: 10, fontWeight: 700, padding: "3px 9px",
+                  borderRadius: 6, textTransform: "uppercase", letterSpacing: 0.5,
+                  border: "1px solid rgba(79,142,247,0.2)",
                 }}>
                   {f.badge}
                 </span>
               )}
-              <div style={{ fontSize: 32, marginBottom: 16 }}>{f.icon}</div>
-              <h3 style={{ fontSize: 18, fontWeight: 700, color: '#f0f0ff', marginBottom: 10 }}>{f.title}</h3>
-              <p style={{ fontSize: 14, color: '#a0a0c0', lineHeight: 1.6 }}>{f.desc}</p>
+
+              {/* Icon container */}
+              <div style={{
+                width: 52, height: 52, borderRadius: 14,
+                background: `${f.color}15`,
+                border: `1px solid ${f.color}25`,
+                display: "flex", alignItems: "center", justifyContent: "center",
+                fontSize: 26, marginBottom: 18,
+              }}>
+                {f.icon}
+              </div>
+
+              <h3 style={{ fontSize: 17, fontWeight: 700, color: "#FFFFFF", marginBottom: 10 }}>{f.title}</h3>
+              <p style={{ fontSize: 14, color: "#8B90AA", lineHeight: 1.65 }}>{f.desc}</p>
             </div>
           ))}
         </div>

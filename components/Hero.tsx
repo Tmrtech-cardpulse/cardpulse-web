@@ -1,101 +1,215 @@
 export default function Hero() {
   return (
     <section id="download" style={{
-      minHeight: '100vh',
-      display: 'flex', alignItems: 'center', justifyContent: 'center',
-      padding: '120px 24px 80px',
-      background: 'radial-gradient(ellipse 80% 60% at 50% 0%, rgba(79,142,247,0.12) 0%, transparent 70%)',
-      textAlign: 'center',
+      minHeight: "100vh",
+      display: "flex", alignItems: "center",
+      padding: "130px 28px 80px",
+      position: "relative", overflow: "hidden",
     }}>
-      <div style={{ maxWidth: 760 }}>
-        {/* Badge */}
-        <div style={{
-          display: 'inline-flex', alignItems: 'center', gap: 6,
-          background: 'rgba(79,142,247,0.12)', border: '1px solid rgba(79,142,247,0.25)',
-          borderRadius: 20, padding: '6px 14px', marginBottom: 32,
-        }}>
-          <span style={{ color: '#4F8EF7', fontSize: 13, fontWeight: 600 }}>
-            ⚡ AI-powered card intelligence
-          </span>
-        </div>
+      {/* Background glow orbs */}
+      <div style={{
+        position: "absolute", top: "10%", left: "50%", transform: "translateX(-50%)",
+        width: 800, height: 500, borderRadius: "50%",
+        background: "radial-gradient(ellipse, rgba(79,142,247,0.10) 0%, transparent 70%)",
+        pointerEvents: "none",
+      }} />
+      <div style={{
+        position: "absolute", top: "40%", left: "15%",
+        width: 300, height: 300, borderRadius: "50%",
+        background: "radial-gradient(ellipse, rgba(123,94,247,0.07) 0%, transparent 70%)",
+        pointerEvents: "none",
+      }} />
 
-        {/* Headline */}
-        <h1 style={{
-          fontSize: 'clamp(38px, 6vw, 68px)',
-          fontWeight: 800,
-          lineHeight: 1.1,
-          letterSpacing: '-1.5px',
-          color: '#f0f0ff',
-          marginBottom: 24,
-        }}>
-          Your sports card collection,{' '}
-          <span style={{
-            background: 'linear-gradient(90deg, #4F8EF7, #7B5EF7)',
-            WebkitBackgroundClip: 'text',
-            WebkitTextFillColor: 'transparent',
-          }}>
-            intelligently managed
-          </span>
-        </h1>
+      <div style={{ maxWidth: 1120, margin: "0 auto", width: "100%", position: "relative" }}>
+        <div style={{ display: "grid", gridTemplateColumns: "1fr 420px", gap: 80, alignItems: "center" }}>
 
-        {/* Subheadline */}
-        <p style={{
-          fontSize: 'clamp(16px, 2.5vw, 20px)',
-          color: '#a0a0c0', lineHeight: 1.6, marginBottom: 48, maxWidth: 560, margin: '0 auto 48px',
-        }}>
-          Scan any card with your camera. Get instant eBay pricing. Track your portfolio P&amp;L.
-          Built for serious UK collectors who want the full picture.
-        </p>
-
-        {/* CTA buttons */}
-        <div style={{ display: 'flex', gap: 16, justifyContent: 'center', flexWrap: 'wrap', marginBottom: 64 }}>
-          <a
-            href="#"
-            style={{
-              display: 'inline-flex', alignItems: 'center', gap: 10,
-              background: '#f0f0ff', color: '#0a0a1a',
-              padding: '14px 28px', borderRadius: 12,
-              fontWeight: 700, fontSize: 16, textDecoration: 'none',
-            }}
-          >
-            <AppleIcon />
-            Download on iOS
-          </a>
-          <a
-            href="#features"
-            style={{
-              display: 'inline-flex', alignItems: 'center', gap: 10,
-              background: 'rgba(255,255,255,0.06)', color: '#f0f0ff',
-              border: '1px solid rgba(255,255,255,0.12)',
-              padding: '14px 28px', borderRadius: 12,
-              fontWeight: 600, fontSize: 16, textDecoration: 'none',
-            }}
-          >
-            See how it works →
-          </a>
-        </div>
-
-        {/* Social proof */}
-        <div style={{ display: 'flex', justifyContent: 'center', gap: 48, flexWrap: 'wrap' }}>
-          {[
-            { value: 'AI-Powered', label: 'Card identification' },
-            { value: 'Live eBay', label: 'Market pricing' },
-            { value: 'Real-time', label: 'Portfolio P&L' },
-          ].map(s => (
-            <div key={s.label} style={{ textAlign: 'center' }}>
-              <div style={{ fontSize: 22, fontWeight: 800, color: '#4F8EF7', marginBottom: 4 }}>{s.value}</div>
-              <div style={{ fontSize: 13, color: '#606080' }}>{s.label}</div>
+          {/* Left — copy */}
+          <div>
+            {/* Badge */}
+            <div style={{
+              display: "inline-flex", alignItems: "center", gap: 8,
+              background: "rgba(79,142,247,0.10)", border: "1px solid rgba(79,142,247,0.25)",
+              borderRadius: 100, padding: "6px 16px", marginBottom: 28,
+            }}>
+              <span style={{
+                width: 6, height: 6, borderRadius: "50%", background: "#4F8EF7",
+                boxShadow: "0 0 8px #4F8EF7", display: "inline-block",
+              }} />
+              <span style={{ color: "#4F8EF7", fontSize: 13, fontWeight: 600 }}>
+                AI-powered · Built for UK collectors
+              </span>
             </div>
-          ))}
+
+            <h1 style={{
+              fontSize: "clamp(40px, 5vw, 62px)",
+              fontWeight: 900,
+              lineHeight: 1.08,
+              letterSpacing: "-2px",
+              color: "#FFFFFF",
+              marginBottom: 24,
+            }}>
+              Your sports card<br />
+              collection,{" "}
+              <span style={{
+                background: "linear-gradient(90deg, #4F8EF7, #7B5EF7)",
+                WebkitBackgroundClip: "text",
+                WebkitTextFillColor: "transparent",
+                backgroundClip: "text",
+              }}>
+                intelligently
+              </span>
+              <br />managed
+            </h1>
+
+            <p style={{
+              fontSize: 18, color: "#8B90AA", lineHeight: 1.65,
+              marginBottom: 40, maxWidth: 460,
+            }}>
+              Scan any card with your camera. Get instant eBay sold prices.
+              Track your portfolio P&amp;L in real time. Built for collectors
+              who want the full picture.
+            </p>
+
+            {/* CTAs */}
+            <div style={{ display: "flex", gap: 12, alignItems: "center", marginBottom: 52, flexWrap: "wrap" }}>
+              <a href="#" style={{
+                display: "inline-flex", alignItems: "center", gap: 10,
+                background: "#FFFFFF", color: "#0D0F1C",
+                padding: "14px 26px", borderRadius: 12,
+                fontWeight: 700, fontSize: 15,
+                boxShadow: "0 4px 20px rgba(0,0,0,0.3)",
+              }}>
+                <AppleIcon />
+                Download on iOS
+              </a>
+              <a href="#features" style={{
+                display: "inline-flex", alignItems: "center", gap: 8,
+                color: "#8B90AA", fontSize: 15, fontWeight: 600,
+                padding: "14px 20px",
+              }}>
+                See features <span style={{ color: "#4F8EF7" }}>→</span>
+              </a>
+            </div>
+
+            {/* Stats */}
+            <div style={{ display: "flex", gap: 40 }}>
+              {[
+                { val: "AI", label: "Card identification" },
+                { val: "Live", label: "eBay sold prices" },
+                { val: "Real-time", label: "Portfolio P&L" },
+              ].map(s => (
+                <div key={s.label}>
+                  <div style={{ fontSize: 20, fontWeight: 800, color: "#4F8EF7", marginBottom: 2 }}>{s.val}</div>
+                  <div style={{ fontSize: 12, color: "#52566B", fontWeight: 500 }}>{s.label}</div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Right — phone mockup */}
+          <div style={{ display: "flex", justifyContent: "center" }}>
+            <PhoneMockup />
+          </div>
         </div>
       </div>
     </section>
   );
 }
 
+function PhoneMockup() {
+  return (
+    <div style={{
+      width: 280, position: "relative",
+      filter: "drop-shadow(0 40px 80px rgba(0,0,0,0.6)) drop-shadow(0 0 40px rgba(79,142,247,0.15))",
+    }}>
+      {/* Phone shell */}
+      <div style={{
+        width: 280, height: 560,
+        background: "linear-gradient(180deg, #1E2236 0%, #161827 100%)",
+        borderRadius: 44,
+        border: "1px solid #252A45",
+        overflow: "hidden",
+        position: "relative",
+      }}>
+        {/* Notch */}
+        <div style={{
+          position: "absolute", top: 0, left: "50%", transform: "translateX(-50%)",
+          width: 100, height: 28,
+          background: "#0D0F1C",
+          borderRadius: "0 0 18px 18px",
+          zIndex: 10,
+        }} />
+
+        {/* Screen content */}
+        <div style={{ padding: "48px 16px 16px", height: "100%", display: "flex", flexDirection: "column", gap: 12 }}>
+          {/* Header */}
+          <div style={{ textAlign: "center", marginBottom: 4 }}>
+            <div style={{ fontSize: 13, fontWeight: 700, color: "#8B90AA", textTransform: "uppercase", letterSpacing: 0.5 }}>My Collection</div>
+          </div>
+
+          {/* Portfolio value */}
+          <div style={{
+            background: "linear-gradient(135deg, rgba(79,142,247,0.15), rgba(123,94,247,0.10))",
+            border: "1px solid rgba(79,142,247,0.2)",
+            borderRadius: 16, padding: "16px", textAlign: "center",
+          }}>
+            <div style={{ fontSize: 11, color: "#8B90AA", marginBottom: 4 }}>Total Value</div>
+            <div style={{ fontSize: 28, fontWeight: 900, color: "#FFFFFF", letterSpacing: "-1px" }}>£4,821</div>
+            <div style={{ fontSize: 12, color: "#30D158", fontWeight: 600, marginTop: 4 }}>↑ £321 this week</div>
+          </div>
+
+          {/* Card rows */}
+          {[
+            { name: "Erling Haaland", set: "Topps Chrome 2023", val: "£340", gain: "+£120", up: true },
+            { name: "Kylian Mbappé", set: "Panini Prizm 2022", val: "£580", gain: "+£95", up: true },
+            { name: "Luka Dončić", set: "Panini Select 2021", val: "£210", gain: "-£30", up: false },
+          ].map(c => (
+            <div key={c.name} style={{
+              background: "#1E2236",
+              border: "1px solid #252A45",
+              borderRadius: 12, padding: "11px 12px",
+              display: "flex", alignItems: "center", gap: 10,
+            }}>
+              <div style={{
+                width: 36, height: 48, borderRadius: 6,
+                background: "linear-gradient(135deg, #252A45, #1E2236)",
+                border: "1px solid #252A45", flexShrink: 0,
+                display: "flex", alignItems: "center", justifyContent: "center",
+                fontSize: 16,
+              }}>🃏</div>
+              <div style={{ flex: 1, minWidth: 0 }}>
+                <div style={{ fontSize: 11, fontWeight: 700, color: "#FFFFFF", marginBottom: 2, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{c.name}</div>
+                <div style={{ fontSize: 10, color: "#52566B" }}>{c.set}</div>
+              </div>
+              <div style={{ textAlign: "right", flexShrink: 0 }}>
+                <div style={{ fontSize: 12, fontWeight: 700, color: "#FFFFFF" }}>{c.val}</div>
+                <div style={{ fontSize: 10, fontWeight: 600, color: c.up ? "#30D158" : "#FF453A" }}>{c.gain}</div>
+              </div>
+            </div>
+          ))}
+
+          {/* Score badge on last card simulation */}
+          <div style={{
+            background: "#161827", border: "1px solid #252A45",
+            borderRadius: 12, padding: "10px 12px",
+            display: "flex", alignItems: "center", justifyContent: "space-between",
+          }}>
+            <span style={{ fontSize: 11, color: "#8B90AA" }}>CardPulse Score</span>
+            <div style={{
+              background: "rgba(79,142,247,0.12)", border: "1px solid rgba(79,142,247,0.25)",
+              borderRadius: 6, padding: "3px 8px",
+              fontSize: 12, fontWeight: 800, color: "#4F8EF7",
+            }}>87 ⚡</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 function AppleIcon() {
   return (
-    <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+    <svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor">
       <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z" />
     </svg>
   );
