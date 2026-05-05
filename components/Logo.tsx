@@ -49,9 +49,9 @@ export default function Logo({ size = 34 }: { size?: number }) {
       {/* Name bar below photo */}
       <rect x="11" y="24.5" width="14" height="2" rx="0.8" fill="#B8720A" opacity="0.5" />
 
-      {/* Pulse line across bottom of card */}
+      {/* Pulse line through middle of card */}
       <polyline
-        points="9,30 12,30 13.5,27 15,32.5 17,25.5 19,30 22,30 27,30"
+        points="9,22 12,22 13.5,19 15,24.5 17,16.5 19,22 22,22 27,22"
         stroke="url(#pulseGrad)"
         strokeWidth="1.8"
         strokeLinecap="round"
