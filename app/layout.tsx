@@ -8,7 +8,7 @@ export const metadata: Metadata = {
     title: "SportsCardPulse — Your Sports Card Collection, Intelligently Managed",
     description: "Scan any card with your camera. Get instant eBay pricing. Track your portfolio P&L.",
     type: "website",
-    url: "https://sportscardpulse.vercel.app",
+    url: "https://www.sportscardpulse.app",
   },
 };
 
