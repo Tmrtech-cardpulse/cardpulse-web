@@ -1,5 +1,6 @@
 "use client";
 import { useState, useEffect } from "react";
+import Logo from "./Logo";
 
 export default function Nav() {
   const [scrolled, setScrolled] = useState(false);
@@ -22,27 +23,16 @@ export default function Nav() {
         maxWidth: 1120, margin: "0 auto", padding: "0 28px",
         height: 64, display: "flex", alignItems: "center", justifyContent: "space-between",
       }}>
-        {/* Logo */}
         <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-          <div style={{
-            width: 34, height: 34, borderRadius: 10,
-            background: "linear-gradient(135deg, #4F8EF7 0%, #7B5EF7 100%)",
-            display: "flex", alignItems: "center", justifyContent: "center",
-            fontSize: 17, fontWeight: 900, color: "#fff",
-            boxShadow: "0 4px 14px rgba(79,142,247,0.4)",
-          }}>⚡</div>
+          <Logo size={34} />
           <span style={{ fontWeight: 800, fontSize: 18, color: "#FFFFFF", letterSpacing: "-0.4px" }}>
             CardPulse
           </span>
         </div>
 
-        {/* Links */}
         <div style={{ display: "flex", alignItems: "center", gap: 32 }}>
           {[["#features", "Features"], ["#how-it-works", "How it works"], ["#pricing", "Pricing"]].map(([href, label]) => (
-            <a key={href} href={href} style={{
-              color: "#8B90AA", fontSize: 14, fontWeight: 500,
-              transition: "color 0.2s",
-            }}
+            <a key={href} href={href} style={{ color: "#8B90AA", fontSize: 14, fontWeight: 500, transition: "color 0.2s" }}
               onMouseEnter={e => (e.currentTarget.style.color = "#FFFFFF")}
               onMouseLeave={e => (e.currentTarget.style.color = "#8B90AA")}
             >{label}</a>

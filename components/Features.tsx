@@ -10,7 +10,7 @@ const FEATURES = [
   {
     icon: "💰",
     title: "Live eBay Pricing",
-    desc: "Real sold prices from eBay the moment you scan. Graded vs raw, PSA 10 vs PSA 9 — broken down clearly.",
+    desc: "Active listing prices free for everyone. Upgrade for real sold prices — what cards are actually changing hands for.",
     badge: null,
     color: "#30D158",
   },
