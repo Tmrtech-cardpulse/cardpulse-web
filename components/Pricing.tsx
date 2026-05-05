@@ -16,7 +16,7 @@ const PREMIUM_FEATURES = [
   "Price alerts & target notifications",
   "Sold price tracking",
   "Portfolio value change alerts",
-  "CardPulse Score (demand index)",
+  "SportsCardPulse Score (demand index)",
 ];
 
 export default function Pricing() {

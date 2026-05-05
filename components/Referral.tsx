@@ -38,7 +38,7 @@ export default function Referral() {
           marginBottom: 36, maxWidth: 440, margin: "0 auto 36px",
         }}>
           Share your unique referral code with a fellow collector. When they sign up,
-          you both unlock 3 days of CardPulse Premium — on us.
+          you both unlock 3 days of SportsCardPulse Premium — on us.
         </p>
 
         <div style={{ display: "flex", gap: 12, justifyContent: "center", flexWrap: "wrap" }}>

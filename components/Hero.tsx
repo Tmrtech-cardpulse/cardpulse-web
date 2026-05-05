@@ -38,7 +38,7 @@ export default function Hero() {
                 boxShadow: "0 0 8px #4F8EF7", display: "inline-block",
               }} />
               <span style={{ fontSize: 13, fontWeight: 700 }}>
-                <span style={{ color: "#FFFFFF" }}>Card</span><span style={{ color: "#4F8EF7" }}>Pulse</span>
+                <span style={{ color: "#FFFFFF" }}>SportsCard</span><span style={{ color: "#4F8EF7" }}>Pulse</span>
                 <span style={{ color: "#4F8EF7" }}> · AI-powered · Built for UK collectors</span>
               </span>
             </div>
@@ -197,7 +197,7 @@ function PhoneMockup() {
             borderRadius: 12, padding: "10px 12px",
             display: "flex", alignItems: "center", justifyContent: "space-between",
           }}>
-            <span style={{ fontSize: 11, color: "#8B90AA" }}>CardPulse Score</span>
+            <span style={{ fontSize: 11, color: "#8B90AA" }}>SportsCardPulse Score</span>
             <div style={{
               background: "rgba(79,142,247,0.12)", border: "1px solid rgba(79,142,247,0.25)",
               borderRadius: 6, padding: "3px 8px",

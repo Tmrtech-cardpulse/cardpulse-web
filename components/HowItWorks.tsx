@@ -3,7 +3,7 @@ const STEPS = [
     num: "01",
     icon: "📸",
     title: "Scan your card",
-    desc: "Open CardPulse and point your camera at any sports card. Our AI reads the player, year, set, and variant automatically — no manual entry needed.",
+    desc: "Open SportsCardPulse and point your camera at any sports card. Our AI reads the player, year, set, and variant automatically — no manual entry needed.",
   },
   {
     num: "02",

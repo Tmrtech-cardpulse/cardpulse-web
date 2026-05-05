@@ -37,7 +37,7 @@ const FEATURES = [
   },
   {
     icon: "⚡",
-    title: "CardPulse Score",
+    title: "SportsCardPulse Score",
     desc: "Every card gets a 0–100 demand score based on market velocity, price trend, and grading premium. Know what's hot.",
     badge: "Premium",
     color: "#4F8EF7",
