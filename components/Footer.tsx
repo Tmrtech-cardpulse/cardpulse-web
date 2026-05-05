@@ -14,8 +14,8 @@ export default function Footer() {
       }}>
         <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
           <Logo size={28} />
-          <span style={{ fontWeight: 800, fontSize: 15, color: "#FFFFFF", letterSpacing: "-0.3px" }}>
-            CardPulse
+          <span style={{ fontWeight: 800, fontSize: 15, letterSpacing: "-0.3px" }}>
+            <span style={{ color: "#FFFFFF" }}>Card</span><span style={{ color: "#4F8EF7" }}>Pulse</span>
           </span>
           <span style={{ color: "#52566B", fontSize: 13, marginLeft: 4 }}>
             © {new Date().getFullYear()} TMR Tech · United Kingdom

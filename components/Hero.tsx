@@ -37,8 +37,9 @@ export default function Hero() {
                 width: 6, height: 6, borderRadius: "50%", background: "#4F8EF7",
                 boxShadow: "0 0 8px #4F8EF7", display: "inline-block",
               }} />
-              <span style={{ color: "#4F8EF7", fontSize: 13, fontWeight: 600 }}>
-                AI-powered · Built for UK collectors
+              <span style={{ fontSize: 13, fontWeight: 700 }}>
+                <span style={{ color: "#FFFFFF" }}>Card</span><span style={{ color: "#4F8EF7" }}>Pulse</span>
+                <span style={{ color: "#4F8EF7" }}> · AI-powered · Built for UK collectors</span>
               </span>
             </div>
 

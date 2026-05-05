@@ -25,8 +25,8 @@ export default function Nav() {
       }}>
         <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
           <Logo size={34} />
-          <span style={{ fontWeight: 800, fontSize: 18, color: "#FFFFFF", letterSpacing: "-0.4px" }}>
-            CardPulse
+          <span style={{ fontWeight: 800, fontSize: 18, letterSpacing: "-0.4px" }}>
+            <span style={{ color: "#FFFFFF" }}>Card</span><span style={{ color: "#4F8EF7" }}>Pulse</span>
           </span>
         </div>
 
