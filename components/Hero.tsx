@@ -103,9 +103,9 @@ export default function Hero() {
             {/* Stats */}
             <div style={{ display: "flex", gap: 40, marginTop: 52, flexWrap: "wrap" }}>
               {[
-                { val: "AI", label: "Card identification" },
+                { val: "30s", label: "Scan your first card" },
                 { val: "Live", label: "eBay sold prices" },
-                { val: "Real-time", label: "Portfolio P&L" },
+                { val: "Free", label: "To get started" },
               ].map(s => (
                 <div key={s.label}>
                   <div style={{ fontSize: 20, fontWeight: 800, color: "#4F8EF7", marginBottom: 2 }}>{s.val}</div>
