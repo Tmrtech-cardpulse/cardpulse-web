@@ -40,7 +40,7 @@ export default function Hero() {
               }} />
               <span style={{ fontSize: 13, fontWeight: 700 }}>
                 <span style={{ color: "#FFFFFF" }}>SportsCard</span><span style={{ color: "#4F8EF7" }}>Pulse</span>
-                <span style={{ color: "#4F8EF7" }}> · AI-powered · Built for UK collectors</span>
+                <span style={{ color: "#FFFFFF" }}> · AI-powered · Built for UK collectors</span>
               </span>
             </div>
 
