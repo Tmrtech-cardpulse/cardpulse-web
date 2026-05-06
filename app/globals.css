@@ -11,3 +11,32 @@ body {
 }
 ::selection { background: rgba(79,142,247,0.3); }
 a { text-decoration: none; }
+
+/* Hero layout */
+.hero-grid {
+  display: grid;
+  grid-template-columns: 1fr 420px;
+  gap: 80px;
+  align-items: center;
+}
+.hero-buttons {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+.hero-mockup { display: flex; justify-content: center; }
+
+/* Nav mobile */
+.nav-links { display: flex; }
+
+@media (max-width: 768px) {
+  .hero-grid {
+    grid-template-columns: 1fr;
+    gap: 48px;
+    text-align: center;
+  }
+  .hero-mockup { display: none; }
+  .hero-buttons { justify-content: center; }
+  .nav-links { display: none; }
+}

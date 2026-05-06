@@ -30,7 +30,7 @@ export default function Nav() {
           </span>
         </div>
 
-        <div style={{ display: "flex", alignItems: "center", gap: 32 }}>
+        <div className="nav-links" style={{ alignItems: "center", gap: 32 }}>
           {[["#features", "Features"], ["#how-it-works", "How it works"], ["#pricing", "Pricing"]].map(([href, label]) => (
             <a key={href} href={href} style={{ color: "#8B90AA", fontSize: 14, fontWeight: 500, transition: "color 0.2s" }}
               onMouseEnter={e => (e.currentTarget.style.color = "#FFFFFF")}
