@@ -1,0 +1,53 @@
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Terms of Service — SportsCardPulse",
+};
+
+export default function TermsPage() {
+  return (
+    <div style={{ background: "#0D0F1C", minHeight: "100vh", padding: "0 0 80px", fontFamily: "-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" }}>
+      <header style={{ background: "#161827", borderBottom: "1px solid #252A45", padding: "20px 24px", display: "flex", alignItems: "center", gap: 10 }}>
+        <div style={{ width: 32, height: 32, background: "linear-gradient(135deg, #4F8EF7, #7B5EF7)", borderRadius: 8, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 16 }}>⚡</div>
+        <div style={{ fontSize: 17, fontWeight: 700, letterSpacing: "-0.3px" }}>
+          <span style={{ color: "#ffffff" }}>SportsCard</span><span style={{ color: "#4F8EF7" }}>Pulse</span>
+        </div>
+      </header>
+
+      <main style={{ maxWidth: 740, margin: "0 auto", padding: "48px 24px" }}>
+        <h1 style={{ fontSize: "2rem", fontWeight: 800, color: "#ffffff", letterSpacing: "-0.5px", marginBottom: 6 }}>Terms of Service</h1>
+        <p style={{ color: "#52566B", fontSize: "0.85rem", marginBottom: 40 }}>SportsCardPulse · Last updated: May 2026 · Operated by TMR Tech, United Kingdom</p>
+
+        {[
+          { title: "1. Acceptance", content: <p>By downloading or using SportsCardPulse you agree to these terms. If you do not agree, do not use the app.</p> },
+          { title: "2. What SportsCardPulse provides", content: <p>SportsCardPulse is a sports card collection management tool providing AI-assisted card identification, market price lookups via eBay, portfolio tracking, and a sports card news feed. All prices and valuations are estimates based on publicly available market data and are for informational purposes only. They are not financial advice.</p> },
+          { title: "3. Your account", content: <p>You are responsible for keeping your login credentials secure. You must be at least 13 years old to use SportsCardPulse. One account per person; you may not share accounts.</p> },
+          { title: "4. Acceptable use", content: <ul style={{ paddingLeft: "1.4rem" }}>
+            <li>Do not use SportsCardPulse for any unlawful purpose.</li>
+            <li>Do not attempt to reverse-engineer, scrape, or extract data from the service.</li>
+            <li>Do not upload content that infringes third-party intellectual property rights.</li>
+            <li>Do not abuse the AI scanning feature in a way that degrades service for other users.</li>
+          </ul> },
+          { title: "5. Free tier limits", content: <p>Free accounts may add up to 20 cards and receive 3 AI scans per month. SportsCardPulse Premium removes these limits and unlocks portfolio tracking, sold price data, price alerts, and CardPulse Score. Limits may change with reasonable notice.</p> },
+          { title: "6. Subscriptions and payments", content: <p>Premium subscriptions are billed through Apple App Store or Google Play. Subscriptions auto-renew unless cancelled at least 24 hours before renewal. Refunds are handled by Apple or Google. We do not issue refunds directly.</p> },
+          { title: "7. Referral programme", content: <p>The referral programme grants both parties a limited-time Premium trial. Codes may only be redeemed once per account. Abuse of the referral system may result in account suspension.</p> },
+          { title: "8. Card Catalogue contributions", content: <p>If you opt in, you grant TMR Tech a non-exclusive, royalty-free licence to use anonymised card identity data to build and improve the shared catalogue. This licence ends when you withdraw consent. No prices or personal information are included.</p> },
+          { title: "9. Intellectual property", content: <p>The SportsCardPulse app, brand, and content are owned by TMR Tech. Card images, player names, and set names are the property of their respective rights holders. SportsCardPulse makes no claim of ownership over third-party card content.</p> },
+          { title: "10. Disclaimer of warranties", content: <p>SportsCardPulse is provided "as is" without warranties of any kind. We do not guarantee uninterrupted service, accuracy of AI identification, or accuracy of market valuations.</p> },
+          { title: "11. Limitation of liability", content: <p>To the maximum extent permitted by UK law, TMR Tech is not liable for any indirect, incidental, or consequential loss arising from use of SportsCardPulse, including financial losses based on app valuations.</p> },
+          { title: "12. Termination", content: <p>We may suspend or terminate your account if you breach these terms. You may delete your account by contacting <a href="mailto:tom@tmrtech.co.uk" style={{ color: "#4F8EF7" }}>tom@tmrtech.co.uk</a>.</p> },
+          { title: "13. Governing law", content: <p>These terms are governed by the laws of England and Wales. Disputes are subject to the exclusive jurisdiction of the courts of England and Wales.</p> },
+          { title: "14. Contact", content: <p><a href="mailto:tom@tmrtech.co.uk" style={{ color: "#4F8EF7" }}>tom@tmrtech.co.uk</a></p> },
+        ].map(({ title, content }) => (
+          <section key={title} style={{ marginBottom: 32 }}>
+            <h2 style={{ fontSize: "1rem", fontWeight: 700, color: "#4F8EF7", textTransform: "uppercase", letterSpacing: "0.5px", marginBottom: 10 }}>{title}</h2>
+            <div style={{ color: "#8B90AA", fontSize: "0.95rem", lineHeight: 1.75 }}>{content}</div>
+          </section>
+        ))}
+
+        <hr style={{ border: "none", borderTop: "1px solid #252A45", margin: "40px 0" }} />
+        <p style={{ fontSize: "0.85rem", color: "#52566B" }}>© 2026 TMR Tech · United Kingdom · <a href="mailto:tom@tmrtech.co.uk" style={{ color: "#4F8EF7" }}>tom@tmrtech.co.uk</a></p>
+      </main>
+    </div>
+  );
+}
