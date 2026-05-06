@@ -51,26 +51,24 @@ export default function Hero() {
               color: "#FFFFFF",
               marginBottom: 24,
             }}>
-              Your sports card<br />
-              collection,{" "}
+              The pulse of<br />
+              the{" "}
               <span style={{
                 background: "linear-gradient(90deg, #4F8EF7, #7B5EF7)",
                 WebkitBackgroundClip: "text",
                 WebkitTextFillColor: "transparent",
                 backgroundClip: "text",
               }}>
-                intelligently
+                hobby
               </span>
-              <br />managed
             </h1>
 
             <p style={{
               fontSize: 18, color: "#8B90AA", lineHeight: 1.65,
               marginBottom: 40, maxWidth: 460,
             }}>
-              Scan any card with your camera. Get instant eBay sold prices.
-              Track your portfolio P&amp;L in real time. Built for collectors
-              who want the full picture.
+              News, market insights, and your collection intelligently managed.
+              Scan any card, get live eBay pricing, and track your portfolio P&amp;L in real time.
             </p>
 
             {/* CTAs */}
@@ -109,9 +107,18 @@ export default function Hero() {
             </div>
           </div>
 
-          {/* Right — phone mockup */}
+          {/* Right — brand banner */}
           <div style={{ display: "flex", justifyContent: "center" }}>
-            <PhoneMockup />
+            <img
+              src="/feature-graphic.png"
+              alt="SportsCardPulse — The pulse of the hobby"
+              style={{
+                width: "100%", maxWidth: 460,
+                borderRadius: 16,
+                border: "1px solid #252A45",
+                boxShadow: "0 40px 80px rgba(0,0,0,0.5), 0 0 40px rgba(79,142,247,0.12)",
+              }}
+            />
           </div>
         </div>
       </div>
