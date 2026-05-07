@@ -1,8 +1,8 @@
 "use client";
 import Logo from "./Logo";
 
-const PRIVACY_URL = "https://dqrusiewaqrkbdstxyia.supabase.co/functions/v1/privacy-policy";
-const TERMS_URL = "https://dqrusiewaqrkbdstxyia.supabase.co/functions/v1/terms-of-service";
+const PRIVACY_URL = "https://www.sportscardpulse.app/privacy";
+const TERMS_URL = "https://www.sportscardpulse.app/terms";
 
 export default function Footer() {
   return (

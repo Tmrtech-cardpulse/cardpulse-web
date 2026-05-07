@@ -9,6 +9,7 @@ export const metadata: Metadata = {
     description: "Scan any card with your camera. Get instant eBay pricing. Track your portfolio P&L.",
     type: "website",
     url: "https://www.sportscardpulse.app",
+    images: [{ url: "/feature-graphic.png", width: 1024, height: 500 }],
   },
 };
 
