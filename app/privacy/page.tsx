@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Logo from "../../components/Logo";
 
 export const metadata: Metadata = {
   title: "Privacy Policy — SportsCardPulse",
@@ -6,11 +7,11 @@ export const metadata: Metadata = {
 
 export default function PrivacyPage() {
   return (
-    <div style={{ background: "#0D0F1C", minHeight: "100vh", padding: "0 0 80px", fontFamily: "-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" }}>
-      <header style={{ background: "#161827", borderBottom: "1px solid #252A45", padding: "20px 24px", display: "flex", alignItems: "center", gap: 10 }}>
-        <div style={{ width: 32, height: 32, background: "linear-gradient(135deg, #4F8EF7, #7B5EF7)", borderRadius: 8, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 16 }}>⚡</div>
+    <div style={{ background: "var(--scp-bg)", minHeight: "100vh", padding: "0 0 80px", fontFamily: "'Poppins', -apple-system, BlinkMacSystemFont, sans-serif" }}>
+      <header style={{ background: "var(--scp-surface)", borderBottom: "1px solid var(--scp-border)", padding: "20px 24px", display: "flex", alignItems: "center", gap: 10 }}>
+        <Logo size={32} />
         <div style={{ fontSize: 17, fontWeight: 700, letterSpacing: "-0.3px" }}>
-          <span style={{ color: "#ffffff" }}>SportsCard</span><span style={{ color: "#4F8EF7" }}>Pulse</span>
+          <span style={{ color: "var(--scp-text)" }}>SportsCard</span><span style={{ color: "var(--scp-accent)" }}>Pulse</span>
         </div>
       </header>
 

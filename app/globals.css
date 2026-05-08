@@ -1,15 +1,33 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&display=swap');
 @import "tailwindcss";
 
+:root {
+  --scp-bg:             #0B0D1A;
+  --scp-surface:        #161827;
+  --scp-elevated:       #1E2236;
+  --scp-border:         #252A45;
+  --scp-text:           #FFFFFF;
+  --scp-text-secondary: #8B90AA;
+  --scp-text-muted:     #52566B;
+  --scp-accent:         #3D7BFF;
+  --scp-accent-hot:     #FF4D8F;
+  --scp-success:        #30D158;
+  --scp-danger:         #FF453A;
+}
+
 * { box-sizing: border-box; margin: 0; padding: 0; }
 html { scroll-behavior: smooth; }
 body {
-  background: #0D0F1C;
-  color: #FFFFFF;
+  background-color: var(--scp-bg);
+  background-image:
+    linear-gradient(rgba(37, 42, 69, 0.15) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(37, 42, 69, 0.15) 1px, transparent 1px);
+  background-size: 48px 48px;
+  color: var(--scp-text);
   font-family: 'Poppins', -apple-system, BlinkMacSystemFont, sans-serif;
   -webkit-font-smoothing: antialiased;
 }
-::selection { background: rgba(79,142,247,0.3); }
+::selection { background: rgba(61,123,255,0.3); }
 a { text-decoration: none; }
 
 /* Hero layout */
