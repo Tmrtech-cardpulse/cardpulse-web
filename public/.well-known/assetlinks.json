@@ -1,0 +1,10 @@
+[{
+  "relation": ["delegate_permission/common.handle_all_urls"],
+  "target": {
+    "namespace": "android_app",
+    "package_name": "com.tmrtech.sportscardpulse",
+    "sha256_cert_fingerprints": [
+      "9A:04:C7:9E:F6:56:5E:69:13:63:F2:01:B9:0D:85:05:E0:B4:7E:FE:BE:8B:74:E3:C6:8D:FC:CB:AB:1A:39:86"
+    ]
+  }
+}]
