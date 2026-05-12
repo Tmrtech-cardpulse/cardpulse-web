@@ -108,10 +108,10 @@ export default function Pricing() {
 
             <p style={{ color: "var(--scp-accent)", fontSize: 12, fontWeight: 700, textTransform: "uppercase", letterSpacing: 1, marginBottom: 12 }}>Premium</p>
             <div style={{ display: "flex", alignItems: "baseline", gap: 6, marginBottom: 4 }}>
-              <span style={{ fontSize: 48, fontWeight: 900, color: "var(--scp-text)", letterSpacing: "-2px" }}>£6.99</span>
+              <span style={{ fontSize: 48, fontWeight: 900, color: "var(--scp-text)", letterSpacing: "-2px" }}>£8.49</span>
               <span style={{ color: "var(--scp-text-muted)", fontSize: 15 }}>/mo</span>
             </div>
-            <p style={{ color: "var(--scp-text-muted)", fontSize: 13, marginBottom: 32 }}>or £59.99/year · 3-day free trial</p>
+            <p style={{ color: "var(--scp-text-muted)", fontSize: 13, marginBottom: 32 }}>or £89.99/year · 3-day free trial</p>
 
             <div style={{ display: "flex", flexDirection: "column", gap: 14, marginBottom: 36 }}>
               {PREMIUM_FEATURES.map(f => (
