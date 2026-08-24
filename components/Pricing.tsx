@@ -1,148 +1,116 @@
-"use client";
+import { Check } from '@phosphor-icons/react/ssr';
+import Link from 'next/link';
 
-const FREE_FEATURES = [
-  "Up to 50 cards in your collection",
-  "eBay active listing prices",
-  "Discover — news, releases & events",
-  "New release notifications",
-  "Manual card entry",
+import { pricing } from '@/lib/site';
+
+const FREE = [
+  `Up to ${pricing.freeCardLimit} cards in your collection`,
+  'eBay active listing prices',
+  'Discover: news, releases and events',
+  'New release notifications',
+  'Manual card entry',
 ];
 
-const PREMIUM_FEATURES = [
-  "Unlimited card collection",
-  "Unlimited AI scanning",
-  "Recently sold price tracking (eBay UK)",
-  "Portfolio P&L tracking",
-  "Target price alerts",
-  "Portfolio value alerts",
-  "SportsCardPulse Score",
+const PREMIUM = [
+  'Unlimited cards',
+  'Unlimited AI card scanning',
+  'Sold prices from eBay UK',
+  'Portfolio profit and loss',
+  'Target price alerts',
+  'Portfolio value alerts',
+  'Pulse Score on every card',
 ];
+
+function Plan({
+  name,
+  price,
+  cadence,
+  note,
+  features,
+  featured,
+}: {
+  name: string;
+  price: string;
+  cadence: string;
+  note: string;
+  features: string[];
+  featured?: boolean;
+}) {
+  return (
+    <div
+      className="panel flex flex-col p-7"
+      style={featured ? { borderColor: 'var(--c-accent)' } : undefined}
+    >
+      <h3 className="text-[15px] font-semibold">{name}</h3>
+      <p className="mt-4 flex items-baseline gap-1.5">
+        <span className="figure text-[38px] font-semibold leading-none" data-money>
+          {price}
+        </span>
+        <span className="text-[14px]" style={{ color: 'var(--c-text-secondary)' }}>
+          {cadence}
+        </span>
+      </p>
+      <p className="mt-2 text-[13px]" style={{ color: 'var(--c-text-secondary)' }}>
+        {note}
+      </p>
+
+      <ul className="mt-7 grid gap-3">
+        {features.map((f) => (
+          <li key={f} className="flex items-start gap-2.5">
+            <Check
+              size={16}
+              weight="bold"
+              color={featured ? 'var(--c-accent)' : 'var(--c-text-secondary)'}
+              style={{ marginTop: 2, flexShrink: 0 }}
+            />
+            <span className="text-[14px]" style={{ color: 'var(--c-text-secondary)' }}>
+              {f}
+            </span>
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+}
 
 export default function Pricing() {
   return (
-    <section id="pricing" style={{ padding: "100px 28px" }}>
-      <div style={{ maxWidth: 860, margin: "0 auto" }}>
+    <section id="pricing" className="px-5 py-16 sm:px-8 lg:py-24">
+      <div className="mx-auto max-w-[1180px]">
+        <p className="eyebrow">Pricing</p>
+        <h2 className="display mt-3 max-w-[16ch]" style={{ fontSize: 'clamp(30px, 4vw, 44px)' }}>
+          Free to start. Paid when it earns it.
+        </h2>
 
-        <div style={{ textAlign: "center", marginBottom: 64 }}>
-          <div style={{
-            display: "inline-block",
-            background: "rgba(61,123,255,0.10)", border: "1px solid rgba(61,123,255,0.2)",
-            borderRadius: 100, padding: "5px 14px", marginBottom: 16,
-          }}>
-            <span style={{ color: "var(--scp-accent)", fontSize: 12, fontWeight: 700, textTransform: "uppercase", letterSpacing: 1 }}>
-              Pricing
-            </span>
-          </div>
-          <h2 style={{
-            fontSize: "clamp(30px, 4vw, 46px)", fontWeight: 900,
-            letterSpacing: "-1px", color: "var(--scp-text)", marginBottom: 16, lineHeight: 1.1,
-          }}>
-            Start free, upgrade when ready
-          </h2>
-          <p style={{ color: "var(--scp-text-secondary)", fontSize: 17, lineHeight: 1.6 }}>
-            No credit card needed to get started.
-          </p>
+        <div className="mt-12 grid gap-5 md:grid-cols-2 lg:max-w-[820px]">
+          <Plan
+            name="Free"
+            price="£0"
+            cadence="forever"
+            note="No card details, no trial timer."
+            features={FREE}
+          />
+          <Plan
+            name="Premium"
+            price={pricing.monthly}
+            cadence="per month"
+            note={`Or ${pricing.yearly} a year. Prices include VAT.`}
+            features={PREMIUM}
+            featured
+          />
         </div>
 
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))", gap: 20 }}>
+        <p className="mt-6 text-[13px]" style={{ color: 'var(--c-text-secondary)' }}>
+          Billed through the App Store or Google Play. Cancel any time in your store account.
+        </p>
 
-          {/* Free */}
-          <div style={{
-            background: "var(--scp-surface)",
-            border: "1px solid var(--scp-border)",
-            borderRadius: 24, padding: "36px 32px",
-          }}>
-            <p style={{ color: "var(--scp-text-muted)", fontSize: 12, fontWeight: 700, textTransform: "uppercase", letterSpacing: 1, marginBottom: 12 }}>Free</p>
-            <div style={{ marginBottom: 6 }}>
-              <span style={{ fontSize: 48, fontWeight: 900, color: "var(--scp-text)", letterSpacing: "-2px" }}>£0</span>
-            </div>
-            <p style={{ color: "var(--scp-text-muted)", fontSize: 13, marginBottom: 32 }}>No credit card required</p>
-
-            <div style={{ display: "flex", flexDirection: "column", gap: 14, marginBottom: 36 }}>
-              {FREE_FEATURES.map(f => (
-                <div key={f} style={{ display: "flex", alignItems: "flex-start", gap: 12 }}>
-                  <div style={{
-                    width: 20, height: 20, borderRadius: 6,
-                    background: "rgba(48,209,88,0.12)", border: "1px solid rgba(48,209,88,0.2)",
-                    display: "flex", alignItems: "center", justifyContent: "center",
-                    flexShrink: 0, marginTop: 1,
-                  }}>
-                    <span style={{ color: "var(--scp-success)", fontSize: 11, fontWeight: 800 }}>✓</span>
-                  </div>
-                  <span style={{ fontSize: 14, color: "var(--scp-text-secondary)", lineHeight: 1.4 }}>{f}</span>
-                </div>
-              ))}
-            </div>
-
-            <a href="#download" style={{
-              display: "block", textAlign: "center",
-              background: "transparent", border: "1px solid var(--scp-border)",
-              color: "var(--scp-text)", padding: "14px",
-              borderRadius: 12, fontWeight: 600, fontSize: 15,
-              transition: "border-color 0.2s",
-            }}
-              onMouseEnter={e => (e.currentTarget.style.borderColor = "var(--scp-accent)")}
-              onMouseLeave={e => (e.currentTarget.style.borderColor = "var(--scp-border)")}
-            >
-              Download free
-            </a>
-          </div>
-
-          {/* Premium */}
-          <div style={{
-            background: "linear-gradient(160deg, #161E38 0%, var(--scp-surface) 100%)",
-            border: "1px solid rgba(61,123,255,0.35)",
-            borderRadius: 24, padding: "36px 32px",
-            position: "relative",
-            boxShadow: "0 0 60px rgba(61,123,255,0.08), inset 0 1px 0 rgba(61,123,255,0.1)",
-          }}>
-            <div style={{
-              position: "absolute", top: -14, left: "50%", transform: "translateX(-50%)",
-              background: "linear-gradient(90deg, #3D7BFF, #7B5EF7)",
-              color: "#fff", fontSize: 11, fontWeight: 700,
-              padding: "5px 16px", borderRadius: 20,
-              textTransform: "uppercase", letterSpacing: 0.8, whiteSpace: "nowrap",
-            }}>
-              Most popular
-            </div>
-
-            <p style={{ color: "var(--scp-accent)", fontSize: 12, fontWeight: 700, textTransform: "uppercase", letterSpacing: 1, marginBottom: 12 }}>Premium</p>
-            <div style={{ display: "flex", alignItems: "baseline", gap: 6, marginBottom: 4 }}>
-              <span style={{ fontSize: 48, fontWeight: 900, color: "var(--scp-text)", letterSpacing: "-2px" }}>£8.49</span>
-              <span style={{ color: "var(--scp-text-muted)", fontSize: 15 }}>/mo</span>
-            </div>
-            <p style={{ color: "var(--scp-text-muted)", fontSize: 13, marginBottom: 32 }}>or £89.99/year · 3-day free trial</p>
-
-            <div style={{ display: "flex", flexDirection: "column", gap: 14, marginBottom: 36 }}>
-              {PREMIUM_FEATURES.map(f => (
-                <div key={f} style={{ display: "flex", alignItems: "flex-start", gap: 12 }}>
-                  <div style={{
-                    width: 20, height: 20, borderRadius: 6,
-                    background: "rgba(61,123,255,0.12)", border: "1px solid rgba(61,123,255,0.25)",
-                    display: "flex", alignItems: "center", justifyContent: "center",
-                    flexShrink: 0, marginTop: 1,
-                  }}>
-                    <span style={{ color: "var(--scp-accent)", fontSize: 11, fontWeight: 800 }}>✓</span>
-                  </div>
-                  <span style={{ fontSize: 14, color: "var(--scp-text)", lineHeight: 1.4 }}>{f}</span>
-                </div>
-              ))}
-            </div>
-
-            <a href="#download" style={{
-              display: "block", textAlign: "center",
-              background: "linear-gradient(135deg, #3D7BFF, #7B5EF7)",
-              color: "#fff", padding: "15px",
-              borderRadius: 12, fontWeight: 700, fontSize: 15,
-              boxShadow: "0 4px 20px rgba(61,123,255,0.35)",
-            }}>
-              Start free trial
-            </a>
-            <p style={{ textAlign: "center", color: "var(--scp-text-muted)", fontSize: 12, marginTop: 10 }}>
-              Auto-renews after trial. Cancel anytime.
-            </p>
-          </div>
-        </div>
+        <Link
+          href="/#waitlist"
+          className="mt-8 inline-block rounded-[var(--r-md)] px-6 py-3 text-[15px] font-semibold transition-transform active:scale-[0.98]"
+          style={{ backgroundColor: 'var(--c-accent)', color: 'var(--c-accent-ink)' }}
+        >
+          Join the waitlist
+        </Link>
       </div>
     </section>
   );

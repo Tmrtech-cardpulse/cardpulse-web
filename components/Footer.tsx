@@ -1,44 +1,59 @@
-"use client";
-import Logo from "./Logo";
+import Link from 'next/link';
 
-const PRIVACY_URL = "https://www.sportscardpulse.app/privacy";
-const TERMS_URL = "https://www.sportscardpulse.app/terms";
+import Wordmark from './Wordmark';
+import { footerNav, site } from '@/lib/site';
 
 export default function Footer() {
   return (
-    <footer style={{ borderTop: "1px solid #252A45", padding: "36px 28px" }}>
-      <div style={{
-        maxWidth: 1120, margin: "0 auto",
-        display: "flex", alignItems: "center", justifyContent: "space-between",
-        flexWrap: "wrap", gap: 20,
-      }}>
-        <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-          <Logo size={28} />
-          <span style={{ fontWeight: 800, fontSize: 15, letterSpacing: "-0.3px" }}>
-            <span style={{ color: "#FFFFFF" }}>SportsCard</span><span style={{ color: "#4F8EF7" }}>Pulse</span>
-          </span>
-          <span style={{ color: "#52566B", fontSize: 13, marginLeft: 4 }}>
-            © {new Date().getFullYear()} TMR Tech · United Kingdom
-          </span>
+    <footer style={{ borderTop: 'var(--web-hairline)' }}>
+      <div className="mx-auto grid max-w-[1180px] gap-12 px-5 py-14 sm:px-8 md:grid-cols-[1fr_auto] md:gap-20">
+        <div>
+          <Wordmark />
+          <p
+            className="mt-4 max-w-[38ch] text-[14px] leading-relaxed"
+            style={{ color: 'var(--c-text-secondary)' }}
+          >
+            Sold prices, portfolio tracking and release news for UK sports card collectors.
+          </p>
+          <a
+            href={`mailto:${site.contact}`}
+            className="mono mt-4 inline-block text-[13px] transition-colors hover:text-[var(--c-text)]"
+            style={{ color: 'var(--c-text-secondary)' }}
+          >
+            {site.contact}
+          </a>
         </div>
 
-        <div style={{ display: "flex", gap: 28, alignItems: "center", flexWrap: "wrap" }}>
-          {[
-            { label: "Privacy Policy", href: PRIVACY_URL },
-            { label: "Terms of Service", href: TERMS_URL },
-            { label: "Contact", href: "mailto:tom@tmrtech.co.uk" },
-          ].map(l => (
-            <a key={l.label} href={l.href}
-              target={l.href.startsWith("http") ? "_blank" : undefined}
-              rel="noopener noreferrer"
-              style={{ color: "#52566B", fontSize: 13, transition: "color 0.2s" }}
-              onMouseEnter={e => (e.currentTarget.style.color = "#8B90AA")}
-              onMouseLeave={e => (e.currentTarget.style.color = "#52566B")}
-            >
-              {l.label}
-            </a>
+        <div className="grid gap-10 sm:grid-cols-3 sm:gap-14">
+          {footerNav.map((group) => (
+            <div key={group.heading}>
+              <p className="col-label">{group.heading}</p>
+              <ul className="mt-3 grid gap-2.5">
+                {group.links.map((l) => (
+                  <li key={l.href}>
+                    <Link
+                      href={l.href}
+                      className="text-[14px] transition-colors hover:text-[var(--c-text)]"
+                      style={{ color: 'var(--c-text-secondary)' }}
+                    >
+                      {l.label}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
           ))}
         </div>
+      </div>
+
+      <div
+        className="mx-auto max-w-[1180px] px-5 py-6 sm:px-8"
+        style={{ borderTop: 'var(--web-hairline)' }}
+      >
+        <p className="text-[13px]" style={{ color: 'var(--c-text-secondary)' }}>
+          © {new Date().getFullYear()} {site.operator}, United Kingdom. Prices shown anywhere on
+          this site are illustrative. Not investment advice.
+        </p>
       </div>
     </footer>
   );

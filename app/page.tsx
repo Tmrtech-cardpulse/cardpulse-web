@@ -1,21 +1,27 @@
-import Nav from "@/components/Nav";
-import Hero from "@/components/Hero";
-import Features from "@/components/Features";
-import HowItWorks from "@/components/HowItWorks";
-import Pricing from "@/components/Pricing";
-import Referral from "@/components/Referral";
-import Footer from "@/components/Footer";
+import Footer from '@/components/Footer';
+import Header from '@/components/Header';
+import Hero from '@/components/Hero';
+import Honesty from '@/components/Honesty';
+import HowItWorks from '@/components/HowItWorks';
+import PhotoBand from '@/components/PhotoBand';
+import Pricing from '@/components/Pricing';
+import PulseScore from '@/components/PulseScore';
+import SoldNotAsking from '@/components/SoldNotAsking';
+import Waitlist from '@/components/Waitlist';
 
 export default function Home() {
   return (
     <>
-      <Nav />
+      <Header />
       <main>
         <Hero />
-        <Features />
+        <SoldNotAsking />
+        <PhotoBand />
         <HowItWorks />
+        <PulseScore />
+        <Honesty />
         <Pricing />
-        <Referral />
+        <Waitlist />
       </main>
       <Footer />
     </>

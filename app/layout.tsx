@@ -1,22 +1,47 @@
-import type { Metadata } from "next";
-import "./globals.css";
+import type { Metadata } from 'next';
+import { Archivo, IBM_Plex_Mono } from 'next/font/google';
+import { Analytics } from '@vercel/analytics/next';
+
+import JsonLd from '@/components/JsonLd';
+import { pageMeta, softwareApplicationLd } from '@/lib/seo';
+import { site } from '@/lib/site';
+
+import './globals.css';
+
+/* Archivo is an industrial grotesque that holds up at display sizes and stays
+   legible at 13px, which this site needs because it sets a lot of small data.
+   Plex Mono carries every figure: it has true tabular numerals, so prices line
+   up in columns without hand-tuning. */
+const archivo = Archivo({
+  subsets: ['latin'],
+  variable: '--font-archivo',
+  display: 'swap',
+});
+
+const plexMono = IBM_Plex_Mono({
+  subsets: ['latin'],
+  weight: ['400', '500', '600'],
+  variable: '--font-plex-mono',
+  display: 'swap',
+});
 
 export const metadata: Metadata = {
-  title: "SportsCardPulse — Your Sports Card Collection, Intelligently Managed",
-  description: "AI-powered sports card identification, real-time eBay pricing, portfolio tracking and P&L. Built for serious UK collectors.",
-  openGraph: {
-    title: "SportsCardPulse — Your Sports Card Collection, Intelligently Managed",
-    description: "Scan any card with your camera. Get instant eBay pricing. Track your portfolio P&L.",
-    type: "website",
-    url: "https://www.sportscardpulse.app",
-    images: [{ url: "/feature-graphic.png", width: 1024, height: 500 }],
-  },
+  metadataBase: new URL(site.url),
+  ...pageMeta({
+    title: site.name,
+    description: site.description,
+    path: '/',
+  }),
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en">
-      <body>{children}</body>
+    <html lang="en-GB" className={`${archivo.variable} ${plexMono.variable}`}>
+      <body>
+        <JsonLd data={softwareApplicationLd()} />
+        {children}
+        <Analytics />
+      </body>
     </html>
   );
 }

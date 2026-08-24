@@ -39,3 +39,8 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# design-review output
+design-review/*.png
+design-review/candidates/
+design-review/.contact-sheet.html

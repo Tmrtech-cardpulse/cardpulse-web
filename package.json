@@ -5,10 +5,20 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start"
+    "start": "next start",
+    "tokens:emit": "tsx scripts/emit-tokens.ts",
+    "verify:tokens": "tsx scripts/emit-tokens.ts --verify",
+    "shoot": "node design-review/shoot.cjs",
+    "verify:articles": "tsx scripts/verify-articles.ts",
+    "verify": "npm run verify:tokens && npm run verify:articles",
+    "images:gen": "node --env-file=.env.local scripts/generate-images.mjs",
+    "images:sheet": "node scripts/contact-sheet.mjs",
+    "serve": "node scripts/serve.mjs"
   },
   "dependencies": {
-    "lucide-react": "^1.14.0",
+    "@phosphor-icons/react": "^2.1.10",
+    "@vercel/analytics": "^2.0.1",
+    "motion": "^13.1.1",
     "next": "16.2.4",
     "react": "19.2.4",
     "react-dom": "19.2.4"
@@ -18,7 +28,9 @@
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "playwright": "^1.62.1",
     "tailwindcss": "^4",
+    "tsx": "^4.23.12",
     "typescript": "^5"
   }
 }

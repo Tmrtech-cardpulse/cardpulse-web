@@ -1,5 +1,7 @@
 'use client';
 
+import { DeviceMobile, Spinner, Warning } from '@phosphor-icons/react';
+import type { Icon } from '@phosphor-icons/react';
 import { useEffect, useState } from 'react';
 
 type State = 'redirecting' | 'no_token' | 'no_app';
@@ -19,50 +21,55 @@ export default function AuthCallbackPage() {
       return;
     }
 
-    // Redirect to the custom scheme — app handles it identically to App Links.
-    // Works whether the user opened the email on desktop or a device without App Links.
+    // Redirect to the custom scheme. The app handles it identically to App
+    // Links, which covers opening the email on desktop or on a device without
+    // App Links support.
     const deepLink = `sportscardpulse://auth/callback#access_token=${accessToken}&refresh_token=${refreshToken}&type=${type ?? 'recovery'}`;
     window.location.href = deepLink;
 
-    // If the browser hasn't navigated away after 2s the app isn't installed.
+    // If the browser has not navigated away after 2s, the app is not installed.
     const timer = setTimeout(() => setState('no_app'), 2000);
     return () => clearTimeout(timer);
   }, []);
 
   if (state === 'no_token') {
     return (
-      <Page icon="⚠️" heading="Link expired" body="This password reset link has already been used or has expired. Please request a new one from the app." />
+      <Page
+        Glyph={Warning}
+        heading="Link expired"
+        body="This password reset link has already been used, or it has expired. Request a new one from the app."
+      />
     );
   }
 
   if (state === 'no_app') {
     return (
-      <Page icon="📱" heading="Open on your phone" body="SportsCardPulse needs to be installed on your device. Tap the link from your email directly on the phone where the app is installed." />
+      <Page
+        Glyph={DeviceMobile}
+        heading="Open this on your phone"
+        body="SportsCardPulse needs to be installed on the device. Tap the link from your email on the phone where you have the app."
+      />
     );
   }
 
   return (
-    <Page icon="⏳" heading="Opening app…" body="You'll be redirected to SportsCardPulse automatically." />
+    <Page Glyph={Spinner} heading="Opening the app" body="You will be redirected automatically." />
   );
 }
 
-function Page({ icon, heading, body }: { icon: string; heading: string; body: string }) {
+function Page({ Glyph, heading, body }: { Glyph: Icon; heading: string; body: string }) {
   return (
-    <main style={{
-      display: 'flex',
-      flexDirection: 'column',
-      alignItems: 'center',
-      justifyContent: 'center',
-      minHeight: '100vh',
-      backgroundColor: '#0B0D1A',
-      color: '#fff',
-      fontFamily: 'system-ui, sans-serif',
-      padding: '24px',
-      textAlign: 'center',
-    }}>
-      <div style={{ fontSize: 48, marginBottom: 24 }}>{icon}</div>
-      <h1 style={{ fontSize: 24, fontWeight: 700, marginBottom: 12 }}>{heading}</h1>
-      <p style={{ fontSize: 16, color: '#9CA3AF', maxWidth: 360, lineHeight: 1.6 }}>{body}</p>
+    <main className="flex min-h-[100dvh] flex-col items-center justify-center px-6 text-center">
+      <Glyph size={32} color="var(--c-accent)" weight="regular" />
+      <h1 className="display mt-6" style={{ fontSize: 'var(--t-heading-lg)' }}>
+        {heading}
+      </h1>
+      <p
+        className="mt-3 max-w-[42ch] leading-relaxed"
+        style={{ color: 'var(--c-text-secondary)', fontSize: 'var(--t-body-sm)' }}
+      >
+        {body}
+      </p>
     </main>
   );
 }

@@ -1,60 +1,204 @@
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&display=swap');
 @import "tailwindcss";
+@import "./tokens.css";
 
-:root {
-  --scp-bg:             #0B0D1A;
-  --scp-surface:        #161827;
-  --scp-elevated:       #1E2236;
-  --scp-border:         #252A45;
-  --scp-text:           #FFFFFF;
-  --scp-text-secondary: #8B90AA;
-  --scp-text-muted:     #52566B;
-  --scp-accent:         #3D7BFF;
-  --scp-accent-hot:     #FF4D8F;
-  --scp-success:        #30D158;
-  --scp-danger:         #FF453A;
-}
-
-* { box-sizing: border-box; margin: 0; padding: 0; }
-html { scroll-behavior: smooth; }
-body {
-  background-color: var(--scp-bg);
-  background-image:
-    linear-gradient(rgba(37, 42, 69, 0.15) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(37, 42, 69, 0.15) 1px, transparent 1px);
-  background-size: 48px 48px;
-  color: var(--scp-text);
-  font-family: 'Poppins', -apple-system, BlinkMacSystemFont, sans-serif;
-  -webkit-font-smoothing: antialiased;
-}
-::selection { background: rgba(61,123,255,0.3); }
-a { text-decoration: none; }
-
-/* Hero layout */
-.hero-grid {
-  display: grid;
-  grid-template-columns: 1fr 420px;
-  gap: 80px;
-  align-items: center;
-}
-.hero-buttons {
-  display: flex;
-  gap: 12px;
-  align-items: center;
-  flex-wrap: wrap;
-}
-.hero-mockup { display: flex; justify-content: center; }
-
-/* Nav mobile */
-.nav-links { display: flex; }
-
-@media (max-width: 768px) {
-  .hero-grid {
-    grid-template-columns: 1fr;
-    gap: 48px;
-    text-align: center;
+/* Resets live inside @layer base deliberately. An unlayered `a { color: inherit }`
+   outranks a Tailwind v4 utility and silently makes link colours unfixable. */
+@layer base {
+  html {
+    -webkit-text-size-adjust: 100%;
+    scroll-behavior: smooth;
+    color-scheme: dark;
   }
-  .hero-mockup { display: none; }
-  .hero-buttons { justify-content: center; }
-  .nav-links { display: none; }
+
+  body {
+    background-color: var(--c-bg);
+    color: var(--c-text);
+    font-family: var(--font-archivo), ui-sans-serif, system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  /* Money and dates live in columns. Figures must not wobble between rows,
+     which is the whole reason the tape is set in mono. */
+  .tabular,
+  [data-money],
+  [data-date] {
+    font-variant-numeric: tabular-nums;
+    font-feature-settings: "tnum" 1;
+  }
+
+  ::selection {
+    background-color: var(--c-accent);
+    color: #ffffff;
+  }
+
+  /* One visible focus treatment for the whole site. Keyboard users get the
+     accent ring on every interactive element without each component
+     re-inventing it. */
+  :focus-visible {
+    outline: 2px solid var(--c-accent);
+    outline-offset: 3px;
+    border-radius: var(--r-sm);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    *, *::before, *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+}
+
+/* ---------------------------------------------------------------------------
+   The tape.
+
+   The design position for this site: a card's price is a market, and the page
+   should read like the tape that market prints. Rows are hairline-ruled rather
+   than boxed, every figure is mono and tabular, and the horizontal runs fade
+   out at the edge instead of stopping at a hard border. If a change makes the
+   data read more like a printed tape and less like a div, it is probably right.
+   --------------------------------------------------------------------------- */
+
+.panel {
+  background-color: var(--c-surface);
+  border: var(--web-hairline);
+  border-radius: var(--r-lg);
+  box-shadow: var(--web-inner-highlight);
+}
+
+.rule {
+  border-bottom: var(--web-hairline);
+}
+
+/* Horizontal data runs fade into the field on the right rather than being
+   clipped, which is what tells the reader the run continues. */
+.tape-mask {
+  -webkit-mask-image: var(--web-tape-fade);
+  mask-image: var(--web-tape-fade);
+}
+
+.mono {
+  font-family: var(--font-plex-mono), ui-monospace, SFMono-Regular, monospace;
+}
+
+/* Section eyebrows. Rationed: see CLAUDE.md, at most one per three sections. */
+.eyebrow {
+  font-family: var(--font-plex-mono), ui-monospace, monospace;
+  font-size: var(--t-micro);
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  color: var(--c-text-secondary);
+}
+
+/* Display type. Archivo tightens well; at these sizes the default tracking
+   reads loose and the default leading reads airy. */
+.display {
+  font-weight: 700;
+  letter-spacing: -0.035em;
+  line-height: 1.02;
+}
+
+/* Column labels inside data panels. Visually similar to .eyebrow but a
+   different job: these name a column of figures, they do not label a section.
+   Kept separate so the section-eyebrow budget stays countable. */
+.col-label {
+  font-family: var(--font-plex-mono), ui-monospace, monospace;
+  font-size: var(--t-micro);
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: var(--c-text-secondary);
+}
+
+/* Long-form legal and support copy. One place styles it, so the pages
+   themselves carry only their words. */
+.prose-legal h2 {
+  font-size: var(--t-heading-md);
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  margin-top: 2.5rem;
+  margin-bottom: 0.75rem;
+}
+.prose-legal h3 {
+  font-size: var(--t-body-lg);
+  font-weight: 600;
+  margin-top: 2rem;
+  margin-bottom: 0.5rem;
+}
+.prose-legal p,
+.prose-legal li {
+  color: var(--c-text-secondary);
+  font-size: var(--t-body-sm);
+  line-height: 1.75;
+}
+.prose-legal p { margin-bottom: 1rem; }
+.prose-legal ul, .prose-legal ol {
+  margin: 0 0 1.25rem 1.25rem;
+  display: grid;
+  gap: 0.5rem;
+}
+.prose-legal ul { list-style: disc; }
+.prose-legal ol { list-style: decimal; }
+.prose-legal a {
+  color: var(--c-accent);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+.prose-legal strong { color: var(--c-text); font-weight: 600; }
+
+/* ---------------------------------------------------------------------------
+   Scroll reveal.
+
+   The resting state is visible. The animation only ever removes something the
+   reader was going to see anyway, and only where the browser supports a view
+   timeline and the reader has not asked for less motion. Nothing on this page
+   depends on JavaScript to become readable.
+   --------------------------------------------------------------------------- */
+@keyframes reveal-in {
+  from { opacity: 0; transform: translateY(14px); }
+  to   { opacity: 1; transform: none; }
+}
+
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .reveal {
+      animation: reveal-in linear both;
+      animation-timeline: view();
+      animation-range: entry 5% cover 22%;
+    }
+  }
+}
+
+/* Large figures. Plex Mono's tabular cell is generous, which is right in a
+   column of prices and too loose for a single display number: at 38px the
+   decimal point floats. Tighten only where the figure is display-sized. */
+.figure {
+  font-family: var(--font-plex-mono), ui-monospace, monospace;
+  letter-spacing: -0.055em;
+  font-variant-numeric: tabular-nums;
+}
+
+/* The summary cells sit in one column on small screens, so the divider has to
+   move from the left edge to the top edge to keep reading as a divider. */
+@media (min-width: 640px) {
+  [data-cell="1"], [data-cell="2"] {
+    border-top: none !important;
+    border-left: var(--web-hairline);
+  }
+}
+
+/* Section rhythm. The page is long and every section shared one ground, which
+   read as a single undifferentiated field. Two bands step up to the surface
+   colour: same theme, one step of elevation, hairlines to land the edges. */
+.band {
+  background-color: var(--c-surface);
+  border-top: var(--web-hairline);
+  border-bottom: var(--web-hairline);
+}
+
+/* A panel on a band has to step up again, or it lands on exactly its own
+   background colour and the edges disappear. */
+.band .panel {
+  background-color: var(--c-elevated);
 }
