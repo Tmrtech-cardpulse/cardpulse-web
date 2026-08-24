@@ -1,0 +1,12 @@
+{
+  "//": "Type-checks the build scripts, which tsconfig.json excludes.\n\nThey are excluded there because `next build` type-checks everything in its\ninclude list, and scripts/emit-tokens.ts imports ../../cardpulse. That path\nexists on a developer machine and does not exist inside a Vercel build, so\nleaving it in the Next project made a deploy fail on a file that never ships.\n\nRun via `npm run verify:types`, which only makes sense where the sibling repo\nis checked out. It is not part of the deploy.",
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "module": "esnext",
+    "moduleResolution": "bundler",
+    "noEmit": true,
+    "types": ["node"]
+  },
+  "include": ["scripts/**/*.ts"],
+  "exclude": ["node_modules"]
+}

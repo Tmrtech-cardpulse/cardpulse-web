@@ -6,6 +6,9 @@
  * These are the house rules from CLAUDE.md, enforced mechanically so they do
  * not decay into things everyone agreed to once. Runs in CI and in `verify`.
  */
+import { readdirSync, readFileSync, statSync } from 'node:fs';
+import { join } from 'node:path';
+
 import { glossary } from '../content/glossary';
 import { guides } from '../content/guides';
 import { plainText, type Block } from '../content/types';
@@ -110,6 +113,36 @@ for (const t of glossary) {
 
 const terms = glossary.map((t) => t.term.toLowerCase());
 if (new Set(terms).size !== terms.length) fail('content/glossary', 'duplicate term');
+
+// 9. Nothing that ships may import a path escaping this repo.
+//
+//    This one is here because it broke production. `scripts/emit-tokens.ts`
+//    imports ../../cardpulse, which is correct: the app repo is the brand
+//    authority. But `next build` type-checks everything in its include list,
+//    and the sibling repo does not exist inside a Vercel build, so the deploy
+//    failed on a file that never ships. Scripts are now excluded from the Next
+//    tsconfig; this asserts that nothing in the shipped tree reintroduces the
+//    same reach, where it could not be excluded.
+{
+  const walk = (dir: string): string[] =>
+    readdirSync(dir).flatMap((entry) => {
+      const full = join(dir, entry);
+      return statSync(full).isDirectory() ? walk(full) : [full];
+    });
+
+  for (const dir of ['app', 'components', 'lib', 'content']) {
+    for (const file of walk(dir)) {
+      if (!/\.(ts|tsx)$/.test(file)) continue;
+      const src = readFileSync(file, 'utf8');
+      for (const m of src.matchAll(/from\s+'([^']+)'/g)) {
+        // `../..` from any of these top-level directories leaves the repo.
+        if (m[1].startsWith('../../')) {
+          fail(file.replace(/\\/g, '/'), `imports outside the repo: ${m[1]}`);
+        }
+      }
+    }
+  }
+}
 
 if (failures.length) {
   console.error(`\n${failures.length} content problem${failures.length === 1 ? '' : 's'}:\n`);

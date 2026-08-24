@@ -10,10 +10,11 @@
     "verify:tokens": "tsx scripts/emit-tokens.ts --verify",
     "shoot": "node design-review/shoot.cjs",
     "verify:articles": "tsx scripts/verify-articles.ts",
-    "verify": "npm run verify:tokens && npm run verify:articles",
+    "verify": "npm run verify:tokens && npm run verify:types && npm run verify:articles",
     "images:gen": "node --env-file=.env.local scripts/generate-images.mjs",
     "images:sheet": "node scripts/contact-sheet.mjs",
-    "serve": "node scripts/serve.mjs"
+    "serve": "node scripts/serve.mjs",
+    "verify:types": "tsc -p tsconfig.scripts.json"
   },
   "dependencies": {
     "@phosphor-icons/react": "^2.1.10",
