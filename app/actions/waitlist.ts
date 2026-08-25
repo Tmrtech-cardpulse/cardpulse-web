@@ -11,6 +11,8 @@
  * pretending the address was stored.
  */
 
+import { site } from '@/lib/site';
+
 export type WaitlistState = {
   status: 'idle' | 'ok' | 'error';
   message?: string;
@@ -34,7 +36,7 @@ export async function joinWaitlist(
   if (!url || !key) {
     return {
       status: 'error',
-      message: 'The waitlist is not connected yet. Email tom@tmrtech.co.uk and you will be added by hand.',
+      message: `The waitlist is not connected yet. Email ${site.waitlistContact} and you will be added by hand.`,
     };
   }
 

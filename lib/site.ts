@@ -8,6 +8,14 @@ export const site = {
   description:
     'Scan a sports card, see what it has really been selling for on eBay UK, and track your collection value over time. Built for UK collectors.',
   contact: 'tom@tmrtech.co.uk',
+  /**
+   * Where waitlist signups are directed.
+   *
+   * Deliberately not `contact`. That address is named in the privacy policy as
+   * the UK GDPR data controller and in the terms, so it is legal copy and does
+   * not move. This one is just an inbox.
+   */
+  waitlistContact: 'founders@dupi.co.uk',
   operator: 'TMR Tech',
   locale: 'en_GB',
 } as const;
