@@ -77,6 +77,44 @@ a copy that goes stale in silence.
 
 Run `npm run verify` before pushing. It is `verify:tokens && verify:articles`.
 
+## Organic search
+
+[docs/topic-map.md](docs/topic-map.md) is the operating document. If a page exists and is not in
+that table, either the table is stale or the page should not exist. It ports the playbook
+`dupi-site` and `bagged-site` ran, and three of its rules bind here:
+
+- **Topic depth beats backlinks, roughly two to one.** Own a subject rather than collect links.
+- **Only in-text links count.** A `related` array renders a grid at the foot and is navigation, not
+  a link plan. `verify:articles` fails the build if a post declares a `pillar` and does not link to
+  it in the body copy, which is the rule that makes a cluster real.
+- **No invented volume data.** There is no Ahrefs or Search Console access in this repo. Priorities
+  are reasoned from structure and marked `[VOLUME]` where a real check should replace a judgement.
+  A fabricated figure is worse than none, because it gets planned against.
+
+The strongest asset on the site, a `/price/{card}` long tail generated from real sold comps, is
+**blocked on the Supabase rebuild and must stay blocked.** A page per card asserted without data is
+a thin programmatic page, which is the shape of a spam farm and is treated as one.
+
+## Posts
+
+Fifty posts across seven clusters in `content/posts/`, one file per cluster so the cluster structure
+is visible in the file tree.
+
+**They are released on a schedule, and the mechanism is load-bearing.** Fifty pages appearing on one
+day is the signature of scaled content abuse under Google's spam policies regardless of who wrote
+them or how good they are. `publishedPosts()` filters on the `published` date, the blog routes set
+`revalidate = 3600`, and `generateStaticParams` prerenders only what is due. A post that is not yet
+due **404s**, and the sitemap omits it, so nothing is submitted that would fail a crawl. Releasing
+the set faster or slower is editing dates, nothing else.
+
+Two content rules specific to this subject, both about not going stale:
+
+- **No current licence holders, and no grading fees, stated as fact.** Licences move between
+  manufacturers and fee schedules change, so posts describe how the structures work and point at the
+  manufacturer for the current position.
+- **No claims about what a named card is worth.** The site quotes one example card, labelled
+  illustrative and computed from the fixture. Everything else describes method.
+
 ## Motion
 
 Scroll reveal is CSS, via `animation-timeline: view()` in `app/globals.css`, not a `whileInView`

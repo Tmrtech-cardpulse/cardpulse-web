@@ -27,7 +27,7 @@ npm run build
 | `npm run start` | Serve the production build |
 | `npm run tokens:emit` | Regenerate `app/tokens.css` from `../cardpulse/src/theme/index.ts` |
 | `npm run verify:tokens` | Fail if `app/tokens.css` was hand-edited |
-| `npm run verify:articles` | Content rules: links resolve, pillar links down, no em-dashes |
+| `npm run verify:articles` | Content rules: links resolve, posts link to their pillar in prose, no em-dashes |
 | `npm run verify` | Both verifies |
 | `npm run serve` | Serve the production build, freeing the port first |
 | `npm run shoot` | Screenshot every route at 1440 / 834 / 390 into `design-review/` |
@@ -50,4 +50,8 @@ Without them the waitlist form tells the reader to email instead of silently dis
 ## Conventions
 
 See [CLAUDE.md](CLAUDE.md) for the design position, the token pipeline, the content model and the
-rules that are enforced mechanically.
+rules that are enforced mechanically. [docs/topic-map.md](docs/topic-map.md) is the operating
+document for organic search.
+
+Blog posts are released on a schedule: a post with a future `published` date 404s and stays out of
+the sitemap until its date arrives. Routes revalidate hourly, so nothing needs redeploying.

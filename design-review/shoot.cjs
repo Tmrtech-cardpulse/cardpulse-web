@@ -21,6 +21,8 @@ const ROUTES = [
   { name: 'guides', path: '/guides' },
   { name: 'glossary', path: '/glossary' },
   { name: 'guide', path: '/guides/how-to-price-a-sports-card' },
+  { name: 'blog', path: '/blog' },
+  { name: 'post', path: '/blog/what-is-my-sports-card-worth' },
   { name: 'privacy', path: '/privacy' },
 ];
 

@@ -11,6 +11,7 @@ import { join } from 'node:path';
 
 import { glossary } from '../content/glossary';
 import { guides } from '../content/guides';
+import { allPosts } from '../content/posts';
 import { plainText, type Block } from '../content/types';
 
 const failures: string[] = [];
@@ -25,7 +26,9 @@ const ROUTES = new Set<string>([
   '/terms',
   '/support',
   '/delete-account',
+  '/blog',
   ...guides.map((g) => `/guides/${g.slug}`),
+  ...allPosts.map((p) => `/blog/${p.slug}`),
 ]);
 
 const linksIn = (blocks: Block[]) =>
@@ -114,7 +117,64 @@ for (const t of glossary) {
 const terms = glossary.map((t) => t.term.toLowerCase());
 if (new Set(terms).size !== terms.length) fail('content/glossary', 'duplicate term');
 
-// 9. Nothing that ships may import a path escaping this repo.
+// 9. Posts. The cluster rules, which are what make a cluster more than a tag.
+for (const post of allPosts) {
+  const where = `posts/${post.slug}`;
+  const prose = plainTextWithLinks(post.blocks);
+  const everything = [
+    post.title,
+    post.metaTitle ?? '',
+    post.description,
+    post.summary,
+    prose,
+    ...(post.faqs ?? []).flatMap((f) => [f.q, f.a]),
+  ].join(String.fromCharCode(10));
+
+  if (/[—–]/.test(everything)) {
+    const line = everything.split(String.fromCharCode(10)).find((l) => /[—–]/.test(l));
+    fail(where, `contains an em or en dash: ${line?.slice(0, 80)}`);
+  }
+
+  if (post.description.length < 110 || post.description.length > 175) {
+    fail(where, `description is ${post.description.length} chars, wanted 110 to 175`);
+  }
+
+  const links = new Set(linksIn(post.blocks).map((h) => h.split('#')[0]));
+
+  for (const href of links) {
+    if (!ROUTES.has(href)) fail(where, `prose links to a route that does not exist: ${href}`);
+  }
+
+  // THE CLUSTER RULE. A post that only reaches its pillar through the footer
+  // card is not supporting it: only in-text links carry weight, so the link has
+  // to be in the body copy or the cluster is decorative.
+  if (post.pillar && !links.has(post.pillar)) {
+    fail(where, `declares pillar ${post.pillar} but does not link to it in the body copy`);
+  }
+
+  for (const slug of post.related ?? []) {
+    if (!allPosts.some((x) => x.slug === slug)) fail(where, `related post does not exist: ${slug}`);
+    if (slug === post.slug) fail(where, 'related links to itself');
+  }
+
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(post.published)) {
+    fail(where, `published date is not ISO yyyy-mm-dd: ${post.published}`);
+  }
+}
+
+// 10. Slugs unique across posts, and not colliding with a guide slug.
+const postSlugs = allPosts.map((p) => p.slug);
+if (new Set(postSlugs).size !== postSlugs.length) {
+  const dupes = postSlugs.filter((s, i) => postSlugs.indexOf(s) !== i);
+  fail('content/posts', `duplicate post slug: ${[...new Set(dupes)].join(', ')}`);
+}
+for (const slug of postSlugs) {
+  if (guides.some((g) => g.slug === slug)) {
+    fail('content/posts', `post slug collides with a guide slug: ${slug}`);
+  }
+}
+
+// 11. Nothing that ships may import a path escaping this repo.
 //
 //    This one is here because it broke production. `scripts/emit-tokens.ts`
 //    imports ../../cardpulse, which is correct: the app repo is the brand
@@ -151,6 +211,8 @@ if (failures.length) {
   process.exit(1);
 }
 
+const live = allPosts.filter((p) => new Date(p.published) <= new Date()).length;
 console.log(
-  `content ok: ${guides.length} guides, ${glossary.length} glossary terms, all links resolve`,
+  `content ok: ${guides.length} guides, ${allPosts.length} posts (${live} live, ` +
+    `${allPosts.length - live} scheduled), ${glossary.length} glossary terms, all links resolve`,
 );

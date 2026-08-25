@@ -32,7 +32,7 @@ export const nav = [
   { href: '/#how-it-works', label: 'How it works' },
   { href: '/#pricing', label: 'Pricing' },
   { href: '/guides', label: 'Guides' },
-  { href: '/glossary', label: 'Glossary' },
+  { href: '/blog', label: 'Blog' },
 ] as const;
 
 export const footerNav = [
@@ -48,6 +48,7 @@ export const footerNav = [
     heading: 'Reading',
     links: [
       { href: '/guides', label: 'Guides' },
+      { href: '/blog', label: 'Blog' },
       { href: '/glossary', label: 'Glossary' },
     ],
   },

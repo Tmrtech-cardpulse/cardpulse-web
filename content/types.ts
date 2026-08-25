@@ -59,6 +59,55 @@ export type Guide = {
   pillar?: boolean;
 };
 
+/**
+ * Blog clusters. A cluster is a group of posts that all link up to one pillar,
+ * which is what "owning a topic" is made of. `selling`, `products` and `care`
+ * have no pillar yet, recorded as a known gap in docs/topic-map.md.
+ */
+export type Cluster =
+  | 'valuation'
+  | 'grading'
+  | 'selling'
+  | 'products'
+  | 'rookies'
+  | 'authenticity'
+  | 'care';
+
+export const CLUSTER_LABEL: Record<Cluster, string> = {
+  valuation: 'Valuing cards',
+  grading: 'Grading',
+  selling: 'Buying and selling',
+  products: 'Sets and products',
+  rookies: 'Rookies',
+  authenticity: 'Authenticity',
+  care: 'Storage and care',
+};
+
+/**
+ * A supporting article.
+ *
+ * `pillar` is the route this post links UP to, and `verify:articles` fails the
+ * build unless that link appears in the body copy. A post that only reaches its
+ * pillar through the footer grid is not part of a cluster, it is just a page.
+ */
+export type Post = {
+  slug: string;
+  title: string;
+  metaTitle?: string;
+  description: string;
+  summary: string;
+  /** ISO date. A date in the future holds the post back: see posts/index.ts. */
+  published: string;
+  updated?: string;
+  cluster: Cluster;
+  /** Route of the pillar this post supports. Must be linked in `blocks`. */
+  pillar?: string;
+  blocks: Block[];
+  faqs?: Faq[];
+  /** Slugs of sibling posts. Navigation, not a link plan. */
+  related?: string[];
+};
+
 /** One hobby term. The glossary is a real reference, not a keyword dump. */
 export type Term = {
   term: string;

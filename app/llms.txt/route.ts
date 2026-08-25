@@ -1,5 +1,6 @@
 import { glossary } from '@/content/glossary';
 import { guides } from '@/content/guides';
+import { publishedPosts } from '@/content/posts';
 import { site } from '@/lib/site';
 
 /**
@@ -19,6 +20,10 @@ export function GET() {
     '## Guides',
     '',
     ...guides.map((g) => `- [${g.title}](${site.url}/guides/${g.slug}): ${g.summary}`),
+    '',
+    '## Blog',
+    '',
+    ...publishedPosts().map((p) => `- [${p.title}](${site.url}/blog/${p.slug}): ${p.summary}`),
     '',
     '## Reference',
     '',
