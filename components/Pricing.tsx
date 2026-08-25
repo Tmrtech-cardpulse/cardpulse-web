@@ -106,8 +106,7 @@ export default function Pricing() {
 
         <Link
           href="/#waitlist"
-          className="mt-8 inline-block rounded-[var(--r-md)] px-6 py-3 text-[15px] font-semibold transition-transform active:scale-[0.98]"
-          style={{ backgroundColor: 'var(--c-accent)', color: 'var(--c-accent-ink)' }}
+          className="cta mt-8 px-6 py-3 text-[15px]"
         >
           Join the waitlist
         </Link>

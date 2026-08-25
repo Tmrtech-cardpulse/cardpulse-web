@@ -31,18 +31,13 @@ export default function Hero() {
           <div className="mt-9 flex flex-wrap items-center gap-3">
             <Link
               href="/#waitlist"
-              className="rounded-[var(--r-md)] px-6 py-3 text-[15px] font-semibold transition-transform active:scale-[0.98]"
-              style={{ backgroundColor: 'var(--c-accent)', color: 'var(--c-accent-ink)' }}
+              className="cta px-6 py-3 text-[15px]"
             >
               Join the waitlist
             </Link>
             <Link
               href="/#how-it-works"
-              className="rounded-[var(--r-md)] px-6 py-3 text-[15px] font-medium transition-colors hover:text-[var(--c-text)]"
-              style={{
-                border: 'var(--web-hairline)',
-                color: 'var(--c-text-secondary)',
-              }}
+              className="cta-ghost px-6 py-3 text-[15px]"
             >
               How it works
             </Link>

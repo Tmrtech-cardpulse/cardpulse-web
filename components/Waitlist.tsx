@@ -13,8 +13,7 @@ function Submit() {
     <button
       type="submit"
       disabled={pending}
-      className="rounded-[var(--r-md)] px-6 py-3 text-[15px] font-semibold transition-transform active:scale-[0.98] disabled:opacity-60"
-      style={{ backgroundColor: 'var(--c-accent)', color: 'var(--c-accent-ink)' }}
+      className="cta px-6 py-3 text-[15px] disabled:opacity-60"
     >
       {pending ? 'Adding you' : 'Join the waitlist'}
     </button>

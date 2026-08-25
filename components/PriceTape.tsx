@@ -20,7 +20,7 @@ export default function PriceTape({ compact = false }: { compact?: boolean }) {
           <p className="mt-1.5 text-[14px] font-semibold leading-snug">{s.title}</p>
         </div>
         <div className="shrink-0 text-right">
-          <p className="figure text-[26px] font-semibold leading-none" data-money>
+          <p className="figure figure-enter text-[26px] font-semibold leading-none" data-money>
             {s.latestLabel}
           </p>
           <p
@@ -33,7 +33,11 @@ export default function PriceTape({ compact = false }: { compact?: boolean }) {
         </div>
       </div>
 
-      <PriceLine comps={s.comps} height={compact ? 72 : 96} />
+      <PriceLine
+        comps={s.comps}
+        height={compact ? 72 : 96}
+        animate={compact ? 'load' : 'scroll'}
+      />
 
       <div className="grid grid-cols-1 sm:grid-cols-3" style={{ borderTop: 'var(--web-hairline)' }}>
         {[
@@ -55,12 +59,17 @@ export default function PriceTape({ compact = false }: { compact?: boolean }) {
         ))}
       </div>
 
-      <ul style={{ borderTop: 'var(--web-hairline)' }}>
-        {rows.map((c) => (
+      <ul className="stagger" style={{ borderTop: 'var(--web-hairline)' }}>
+        {rows.map((c, i) => (
           <li
             key={c.soldOn}
             className="flex items-center justify-between px-5 py-2"
-            style={{ borderBottom: 'var(--web-hairline)' }}
+            style={
+              {
+                borderBottom: 'var(--web-hairline)',
+                '--stagger-index': i,
+              } as React.CSSProperties
+            }
           >
             <span className="mono text-[13px]" data-date style={{ color: 'var(--c-text-secondary)' }}>
               {formatCompDate(c.soldOn)}

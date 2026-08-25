@@ -74,7 +74,7 @@ export default function BlogPage() {
                   <li key={p.slug} style={{ borderBottom: 'var(--web-hairline)' }}>
                     <Link
                       href={`/blog/${p.slug}`}
-                      className="grid gap-2 py-5 transition-colors md:grid-cols-[1fr_auto] md:items-baseline md:gap-8"
+                      className="row-hover grid gap-2 py-5 md:grid-cols-[1fr_auto] md:items-baseline md:gap-8"
                     >
                       <div>
                         <h3 className="text-[17px] font-medium">{p.title}</h3>

@@ -117,14 +117,48 @@ Two content rules specific to this subject, both about not going stale:
 
 ## Motion
 
-Scroll reveal is CSS, via `animation-timeline: view()` in `app/globals.css`, not a `whileInView`
-motion component. This is not a preference. A JS reveal parks real content at opacity 0 until an
-IntersectionObserver fires, so anything that does not scroll never sees it, and the first build of
-this redesign shipped exactly that bug. The CSS version has a visible resting state and adds motion
-only where the browser supports a view timeline and the reader has not asked for less.
+**No motion library.** `motion/react` was removed: the header was its only consumer, and it cost
+107KB of client JavaScript to fade one background. Everything is CSS, which also means it runs off
+the main thread and cannot judder while the page is busy. This matches `dupi-site`, which ships zero
+motion JS and is the smoothest of the three sites for exactly that reason.
 
-`Header` is the one motion component, and it reads scroll position from Motion's `useScroll`. Never
-`window.addEventListener('scroll')`, and never `useState` for a continuous value.
+**Animation is additive, never subtractive.** Every keyframe animation lives inside
+`@media (prefers-reduced-motion: no-preference)`, so under `reduce` the animations are not declared
+at all and the resting state is simply what renders. There is no blanket
+`animation-duration: 0.01ms !important`: that forces animations to complete instantly including any
+whose resting state is the hidden pose, which is how the first build of this site shipped invisible
+content. Transitions are kept under `reduce`, because a hover colour change is feedback rather than
+motion; what collapses is the springs.
+
+**Springs.** A cubic-bezier cannot overshoot its endpoint, so a curve that settles rather than merely
+arrives has to be a CSS `linear()` with enough stops to describe the wobble. `--web-spring-reveal`
+overshoots gently to 1.047 and is for content arriving. `--web-spring-slam` overshoots hard to 1.148
+and is for something landing. Both degrade to `--m-ease` under reduced motion, keeping the timing and
+dropping the bounce. They are web-only garnish by necessity: React Native's easing API cannot express
+them, which is why they are declared in `platformDrift.web` rather than in `Motion`.
+
+Timing is `--m-fast` 140, `--m-base` 240, `--m-slow` 480, `--m-ceremony` 900. Ceremony is
+deliberately far from slow: a duration between the two reads as a slow transition rather than a
+deliberate one, and it is for the one moment per page meant to be watched.
+
+**What actually moves, and why each is motivated:**
+
+- The comp line **prints itself**. It is the tape, and a tape prints. Above the fold it draws on
+  load; below the fold the same keyframe is driven by a view timeline so it prints as it arrives
+  rather than before anyone has seen it. Normalised with SVG `pathLength` so the dash pattern
+  survives the stretched viewBox.
+- Comp rows **stagger in from the left**, like printed lines. Delay comes from `--stagger-index` on
+  each child, capped at the eighth: past about half a second the reader is waiting, not being led.
+- Headline figures use `figure-in` on a spring, because a number that settles reads as printed and a
+  number that fades reads as loaded.
+- Panels lift on hover, rows nudge right. Feedback about what is interactive.
+- The header lifts on a `scroll()` timeline. **Not gated on reduced motion**, because without a
+  ground the nav sits on page content and stops being readable, and the safe default is background
+  on: a browser without scroll-timeline support keeps it permanently.
+
+**Component classes belong in `@layer components`.** Unlayered they outrank Tailwind utilities: a
+bare `.cta { display: inline-flex }` beat `md:hidden` and put a second button in the header on every
+desktop page. Same trap as the note in `@layer base`, one layer up.
 
 ## Conventions
 

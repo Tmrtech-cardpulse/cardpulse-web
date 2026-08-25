@@ -41,15 +41,34 @@
     border-radius: var(--r-sm);
   }
 
+  /* Reduced motion is handled by making animation additive rather than by
+     switching it off after the fact. Every keyframe animation on this site
+     lives inside `prefers-reduced-motion: no-preference`, so under `reduce`
+     they are never declared and the resting state is simply what renders. The
+     blanket `animation-duration: 0.01ms !important` this replaced was a blunt
+     instrument: it forced every animation to complete instantly, including any
+     whose resting state was the hidden pose.
+
+     Transitions are kept. A colour change on hover is feedback, not motion,
+     and removing it makes the interface feel broken rather than calm. What
+     does change is the springs: they collapse to the plain ease, which keeps
+     the timing and removes the overshoot. */
   @media (prefers-reduced-motion: reduce) {
     html { scroll-behavior: auto; }
-    *, *::before, *::after {
-      animation-duration: 0.01ms !important;
-      animation-iteration-count: 1 !important;
-      transition-duration: 0.01ms !important;
+    :root {
+      --web-spring-reveal: var(--m-ease);
+      --web-spring-slam: var(--m-ease);
+      --web-hover-lift: none;
     }
   }
 }
+
+/* Component classes live in @layer components so Tailwind utilities, which are
+   emitted into the utilities layer, still win. Unlayered they do not: a bare
+   `.cta { display: inline-flex }` outranked `md:hidden` and put a second
+   header button on every desktop page. Same trap the note in @layer base
+   describes, one layer up. */
+@layer components {
 
 /* ---------------------------------------------------------------------------
    The tape.
@@ -146,28 +165,42 @@
   text-underline-offset: 2px;
 }
 .prose-legal strong { color: var(--c-text); font-weight: 600; }
-
 /* ---------------------------------------------------------------------------
-   Scroll reveal.
+   Hover and press.
 
-   The resting state is visible. The animation only ever removes something the
-   reader was going to see anyway, and only where the browser supports a view
-   timeline and the reader has not asked for less motion. Nothing on this page
-   depends on JavaScript to become readable.
+   Not gated on reduced motion: these are feedback about what is interactive,
+   and a card that does nothing when pointed at reads as broken rather than as
+   restrained. The lift itself resolves to `none` under reduce, so what remains
+   is the border and the shadow.
    --------------------------------------------------------------------------- */
-@keyframes reveal-in {
-  from { opacity: 0; transform: translateY(14px); }
-  to   { opacity: 1; transform: none; }
+a.panel,
+button.panel {
+  transition:
+    transform var(--m-base) var(--m-ease),
+    border-color var(--m-base) var(--m-ease),
+    background-color var(--m-base) var(--m-ease);
 }
 
-@supports (animation-timeline: view()) {
-  @media (prefers-reduced-motion: no-preference) {
-    .reveal {
-      animation: reveal-in linear both;
-      animation-timeline: view();
-      animation-range: entry 5% cover 22%;
-    }
-  }
+a.panel:hover,
+button.panel:hover {
+  transform: var(--web-hover-lift);
+  border-color: color-mix(in oklab, var(--c-accent) 45%, var(--c-border));
+  background-color: var(--c-elevated);
+}
+
+a.panel:active,
+button.panel:active {
+  transform: translateY(0) scale(0.995);
+  transition-duration: var(--m-fast);
+}
+
+/* Rows in an index behave like rows, not cards: the text leads rather than the
+   container lifting. */
+.row-hover {
+  transition: color var(--m-fast) var(--m-ease), padding-left var(--m-base) var(--m-ease);
+}
+.row-hover:hover {
+  padding-left: 6px;
 }
 
 /* Large figures. Plex Mono's tabular cell is generous, which is right in a
@@ -201,4 +234,161 @@
    background colour and the edges disappear. */
 .band .panel {
   background-color: var(--c-elevated);
+}
+
+/* ---------------------------------------------------------------------------
+   Header lift.
+
+   Driven by a scroll-progress timeline, so it runs off the main thread and
+   cannot judder while the page is busy. Replaced a Motion `useScroll`, which
+   was the only reason the motion library reached the browser at all.
+
+   NOT gated on prefers-reduced-motion. This is not decoration: without a
+   ground behind it the nav sits directly on page content and stops being
+   readable. What it animates is a background, not movement.
+
+   The default below is the SAFE state. A browser without scroll-timeline
+   support keeps the background permanently: losing the transparent-at-top
+   effect is cosmetic, losing the background is a legibility bug.
+   --------------------------------------------------------------------------- */
+.header-lift {
+  background-color: color-mix(in oklab, var(--c-bg) 82%, transparent);
+  border-bottom: var(--web-hairline);
+  backdrop-filter: saturate(140%) blur(14px);
+  -webkit-backdrop-filter: saturate(140%) blur(14px);
+}
+
+@supports (animation-timeline: scroll()) {
+  @keyframes header-lift {
+    from {
+      background-color: transparent;
+      border-bottom-color: transparent;
+      backdrop-filter: none;
+      -webkit-backdrop-filter: none;
+    }
+    to {
+      background-color: color-mix(in oklab, var(--c-bg) 82%, transparent);
+      border-bottom-color: var(--c-border);
+      backdrop-filter: saturate(140%) blur(14px);
+      -webkit-backdrop-filter: saturate(140%) blur(14px);
+    }
+  }
+
+  .header-lift {
+    animation: header-lift linear both;
+    animation-timeline: scroll();
+    /* Complete within the first 80px, so the bar has its ground before the
+       hero headline reaches it rather than fading in underneath it. */
+    animation-range: 0 80px;
+  }
+}
+
+/* The one filled control, defined once so the header, the hero and the
+   waitlist cannot drift apart. Uses the accessible ink: white on the accent
+   measures 3.84:1 and fails AA. */
+.cta {
+  display: inline-flex;
+  align-items: center;
+  border-radius: var(--r-md);
+  padding: 0.55rem 1.15rem;
+  font-weight: 600;
+  background-color: var(--c-accent);
+  color: var(--c-accent-ink);
+  transition:
+    transform var(--m-fast) var(--m-ease),
+    filter var(--m-base) var(--m-ease);
+}
+.cta:hover { filter: brightness(1.08); }
+.cta:active { transform: scale(0.97); transition-duration: 90ms; }
+
+/* The secondary control. Same geometry as .cta so the pair sits on one line. */
+.cta-ghost {
+  display: inline-flex;
+  align-items: center;
+  border-radius: var(--r-md);
+  border: var(--web-hairline);
+  font-weight: 500;
+  color: var(--c-text-secondary);
+  transition:
+    color var(--m-base) var(--m-ease),
+    border-color var(--m-base) var(--m-ease),
+    transform var(--m-fast) var(--m-ease);
+}
+.cta-ghost:hover {
+  color: var(--c-text);
+  border-color: color-mix(in oklab, var(--c-accent) 45%, var(--c-border));
+}
+.cta-ghost:active { transform: scale(0.97); transition-duration: 90ms; }
+}
+
+/* ---------------------------------------------------------------------------
+   Scroll reveal.
+
+   The resting state is visible. The animation only ever removes something the
+   reader was going to see anyway, and only where the browser supports a view
+   timeline and the reader has not asked for less motion. Nothing on this page
+   depends on JavaScript to become readable.
+   --------------------------------------------------------------------------- */
+@media (prefers-reduced-motion: no-preference) {
+  @keyframes reveal-in {
+    from { opacity: 0; transform: translateY(14px); }
+    to   { opacity: 1; transform: none; }
+  }
+
+  /* A figure arriving. Spring rather than ease, because a number that settles
+     reads as printed and a number that merely fades reads as loaded. */
+  @keyframes figure-in {
+    from { opacity: 0; transform: translateY(6px) scale(0.94); }
+    to   { opacity: 1; transform: none; }
+  }
+
+  /* One row of the tape. Enters from the left, as a printed line would. */
+  @keyframes row-in {
+    from { opacity: 0; transform: translateX(-6px); }
+    to   { opacity: 1; transform: none; }
+  }
+
+  /* The comp line drawing itself. The dash offset is set inline from the path
+     length, so the stroke is revealed rather than faded in. */
+  @keyframes tape-print {
+    from { stroke-dashoffset: var(--line-length, 200); }
+    to   { stroke-dashoffset: 0; }
+  }
+
+  @supports (animation-timeline: view()) {
+    .reveal {
+      animation: reveal-in linear both;
+      animation-timeline: view();
+      animation-range: entry 5% cover 22%;
+    }
+  }
+
+  /* Stagger. Callers set --stagger-index on each child and the delay follows,
+     so a list sequences without a delay being written per item. Capped at the
+     eighth child: past roughly half a second the reader is waiting rather than
+     being led. */
+  .stagger > * {
+    animation: row-in var(--m-base) var(--web-spring-reveal) both;
+    animation-delay: calc(min(var(--stagger-index, 0), 8) * 45ms);
+  }
+
+  .figure-enter {
+    animation: figure-in var(--m-base) var(--web-spring-reveal) both;
+    animation-delay: var(--figure-delay, 0ms);
+  }
+
+  /* The hero tape prints on load. Below the fold the same line is driven by a
+     view timeline instead, so it prints as it arrives rather than before it is
+     seen. */
+  .tape-line-draw {
+    animation: tape-print var(--m-ceremony) var(--m-ease) both;
+  }
+
+  @supports (animation-timeline: view()) {
+    .tape-line-scroll {
+      animation: tape-print linear both;
+      animation-timeline: view();
+      animation-range: entry 20% cover 45%;
+    }
+  }
 }
