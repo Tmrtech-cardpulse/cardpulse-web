@@ -52,11 +52,23 @@ export async function joinWaitlist(
         // long way from the cause.
         apikey: key,
         'Content-Type': 'application/json',
-        Prefer: 'resolution=ignore-duplicates,return=minimal',
+        // Plain insert. NOT `resolution=ignore-duplicates`: that turns the
+        // request into an upsert, and an upsert needs UPDATE permission, which
+        // the anon role deliberately does not have. Insert-only is the right
+        // posture for a public form, because it means nobody can use it to
+        // modify an address that is already on the list. Duplicates come back
+        // as 409 and are handled below rather than avoided here.
+        Prefer: 'return=minimal',
       },
       body: JSON.stringify({ email, source: 'sportscardpulse.app' }),
       cache: 'no-store',
     });
+
+    // 409 is the unique index on lower(email) doing its job. From the reader's
+    // point of view they are on the list, which is all they asked about.
+    if (res.status === 409) {
+      return { status: 'ok', message: 'You are already on the list. We will be in touch.' };
+    }
 
     if (!res.ok) {
       return { status: 'error', message: 'Something went wrong saving that. Try again shortly.' };
