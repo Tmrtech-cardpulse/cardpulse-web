@@ -44,8 +44,13 @@ export async function joinWaitlist(
     const res = await fetch(`${url}/rest/v1/waitlist`, {
       method: 'POST',
       headers: {
+        // `apikey` only, deliberately. Sending the same value again as
+        // `Authorization: Bearer` makes PostgREST try to parse it as a JWT.
+        // A modern sb_publishable_ key is not one, so the request drops out of
+        // the `anon` role and the insert policy stops matching: the failure
+        // presents as an RLS violation rather than an auth error, which is a
+        // long way from the cause.
         apikey: key,
-        Authorization: `Bearer ${key}`,
         'Content-Type': 'application/json',
         Prefer: 'resolution=ignore-duplicates,return=minimal',
       },
