@@ -10,7 +10,7 @@ export const colors = {
   "accentHotMuted": "rgba(255,77,143,0.15)",
   "text": "#FFFFFF",
   "textSecondary": "#8B90AA",
-  "textMuted": "#52566B",
+  "textMuted": "#828AA8",
   "danger": "#FF453A",
   "success": "#30D158",
   "accentInk": "#0B0D1A"
