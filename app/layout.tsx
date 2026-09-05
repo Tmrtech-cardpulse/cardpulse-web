@@ -38,6 +38,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en-GB" className={`${archivo.variable} ${plexMono.variable}`}>
       <body>
+        {/* Every page opens with a fixed header carrying five links. Without
+            this a keyboard reader tabs through the whole nav on each one. */}
+        <a href="#main" className="skip-link">
+          Skip to content
+        </a>
         <JsonLd data={softwareApplicationLd()} />
         {children}
         <Analytics />

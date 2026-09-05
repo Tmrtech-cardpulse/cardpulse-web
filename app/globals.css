@@ -27,9 +27,19 @@
     font-feature-settings: "tnum" 1;
   }
 
+  /* The header is fixed, so an anchor target scrolled to the top of the
+     viewport lands underneath it: `#pricing` used to put the eyebrow behind
+     the bar. Declared once on every id rather than per section, because the
+     prose heading ids and the glossary terms are anchor targets too. */
+  [id] {
+    scroll-margin-top: 88px;
+  }
+
   ::selection {
     background-color: var(--c-accent);
-    color: #ffffff;
+    /* The accessible ink, for the same reason .cta uses it: white on the
+       accent does not clear AA, and the token exists precisely for this. */
+    color: var(--c-accent-ink);
   }
 
   /* One visible focus treatment for the whole site. Keyboard users get the
@@ -119,6 +129,36 @@
   line-height: 1.02;
 }
 
+/* ---------------------------------------------------------------------------
+   The hero headline.
+
+   It is written as two lines with a hard break, and it was sized against the
+   viewport, which is not the box it has to fit in. The two disagree twice: on a
+   360px phone the 40px floor put "Know what your cards" over two lines, and at
+   1024px the `lg` grid hands 460px of the row to the tape while the viewport
+   sum says the type should be near its maximum. Measured, the headline rendered
+   as FOUR lines at 320, 360, 1024 and 1100, and three at 390 and 1180. It is
+   meant to be two, everywhere.
+
+   So it is sized in `cqw` against the copy column instead. 9.6cqw leaves the
+   longer line at about 94 per cent of the column at every width, which is the
+   invariant the design actually wants. The vw version is kept first as the
+   fallback for anything without container queries: it is the behaviour that
+   shipped, not a regression.
+   --------------------------------------------------------------------------- */
+.hero-headline {
+  font-size: clamp(32px, 6vw, 64px);
+}
+
+@supports (container-type: inline-size) {
+  .hero-copy {
+    container-type: inline-size;
+  }
+  .hero-headline {
+    font-size: clamp(28px, 9.6cqw, 64px);
+  }
+}
+
 /* Column labels inside data panels. Visually similar to .eyebrow but a
    different job: these name a column of figures, they do not label a section.
    Kept separate so the section-eyebrow budget stays countable. */
@@ -130,8 +170,19 @@
   color: var(--c-text-secondary);
 }
 
-/* Long-form legal and support copy. One place styles it, so the pages
-   themselves carry only their words. */
+/* Long-form copy: guides, posts, and the legal and support pages. One place
+   styles it, so the pages themselves carry only their words.
+
+   The column is capped in `ch` rather than px because the constraint is a
+   measure, not a width: at 16px in Archivo this lands at roughly 75 characters
+   a line, which is the top of the comfortable range. It used to be 14px in a
+   760px column, which measured about 95 characters and is why the guides read
+   as harder work than they are. The cap sits on the wrapper so headings, lists
+   and note panels share one column edge with the paragraphs. */
+.prose-legal {
+  max-width: 68ch;
+}
+
 .prose-legal h2 {
   font-size: var(--t-heading-md);
   font-weight: 600;
@@ -148,7 +199,7 @@
 .prose-legal p,
 .prose-legal li {
   color: var(--c-text-secondary);
-  font-size: var(--t-body-sm);
+  font-size: var(--t-body);
   line-height: 1.75;
 }
 .prose-legal p { margin-bottom: 1rem; }
@@ -159,12 +210,35 @@
 }
 .prose-legal ul { list-style: disc; }
 .prose-legal ol { list-style: decimal; }
-.prose-legal a {
+/* `a` rather than a bare class means this rule measures (0,1,1), which beats
+   `.cta` at (0,1,0) in the same layer. That painted the accent link colour on
+   top of the accent button ground and left the account deletion control
+   rendering as a blank blue block. Scoped to unclassed links: a link that has
+   been given a class has been given a treatment, and this is not it. */
+.prose-legal a:not([class]) {
   color: var(--c-accent);
   text-decoration: underline;
   text-underline-offset: 2px;
 }
 .prose-legal strong { color: var(--c-text); font-weight: 600; }
+/* `Prose` can emit inline code and nothing styled it, so a post using the
+   syntax would have rendered as mono text with no other signal. Sized down a
+   step because Plex Mono runs large next to Archivo at the same px. */
+.prose-legal code {
+  font-family: var(--font-plex-mono), ui-monospace, monospace;
+  font-size: 0.875em;
+  background-color: var(--c-elevated);
+  border: var(--web-hairline);
+  border-radius: var(--r-sm);
+  padding: 0.1em 0.35em;
+  color: var(--c-text);
+}
+/* The one place long-form copy can produce a run wider than the column. Wide
+   content scrolls inside its own box rather than pushing the page sideways. */
+.prose-legal pre {
+  overflow-x: auto;
+  max-width: 100%;
+}
 /* ---------------------------------------------------------------------------
    Hover and press.
 
@@ -283,6 +357,29 @@ button.panel:active {
   }
 }
 
+/* Skip link. The header carries five links before the content starts on every
+   page, and a keyboard reader had no way past them. Off-screen rather than
+   `display: none`, because a hidden element is not focusable and a skip link
+   that cannot be focused is decoration. */
+.skip-link {
+  position: fixed;
+  top: 0.75rem;
+  left: 0.75rem;
+  z-index: 60;
+  display: inline-flex;
+  align-items: center;
+  border-radius: var(--r-md);
+  padding: 0.55rem 1.15rem;
+  font-size: var(--t-body-sm);
+  font-weight: 600;
+  background-color: var(--c-accent);
+  color: var(--c-accent-ink);
+  transform: translateY(-250%);
+}
+.skip-link:focus-visible {
+  transform: none;
+}
+
 /* The one filled control, defined once so the header, the hero and the
    waitlist cannot drift apart. Uses the accessible ink: white on the accent
    measures 3.84:1 and fails AA. */
@@ -291,6 +388,10 @@ button.panel:active {
   align-items: center;
   border-radius: var(--r-md);
   padding: 0.55rem 1.15rem;
+  /* 44px is the smallest comfortable thumb target, and the header instance of
+     this button was 37. The hero and pricing instances already cleared it
+     through their own padding, so only the compact ones move. */
+  min-height: 44px;
   font-weight: 600;
   background-color: var(--c-accent);
   color: var(--c-accent-ink);
@@ -307,6 +408,7 @@ button.panel:active {
   align-items: center;
   border-radius: var(--r-md);
   border: var(--web-hairline);
+  min-height: 44px;
   font-weight: 500;
   color: var(--c-text-secondary);
   transition:

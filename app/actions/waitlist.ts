@@ -16,18 +16,46 @@ import { site } from '@/lib/site';
 export type WaitlistState = {
   status: 'idle' | 'ok' | 'error';
   message?: string;
+  /**
+   * What was typed, echoed back. React resets an uncontrolled form once the
+   * action returns, so without this a rejected address is wiped and has to be
+   * retyped in full to fix one character.
+   */
+  email?: string;
+  /**
+   * Set only when the failure is that there is nowhere to store the address
+   * yet, so the form can offer the inbox as a link instead of as text the
+   * reader has to select and copy by hand.
+   */
+  contact?: string;
+  /**
+   * Submission counter. The form keys the input on it so a re-render actually
+   * re-applies `email` above: changing `defaultValue` alone does nothing to an
+   * input the browser has already reset.
+   */
+  attempt: number;
 };
 
 const EMAIL = /^[^@\s]+@[^@\s]+\.[^@\s]{2,}$/;
 
+/** Long enough that a stalled connection reports rather than hanging on a
+ *  spinner, short enough that the reader has not given up first. */
+const TIMEOUT_MS = 8000;
+
 export async function joinWaitlist(
-  _prev: WaitlistState,
+  prev: WaitlistState,
   formData: FormData,
 ): Promise<WaitlistState> {
+  const attempt = prev.attempt + 1;
   const email = String(formData.get('email') ?? '').trim().toLowerCase();
 
   if (!EMAIL.test(email)) {
-    return { status: 'error', message: 'That does not look like an email address.' };
+    return {
+      status: 'error',
+      message: 'That does not look like an email address. Check it and try again.',
+      email,
+      attempt,
+    };
   }
 
   const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
@@ -36,7 +64,10 @@ export async function joinWaitlist(
   if (!url || !key) {
     return {
       status: 'error',
-      message: `The waitlist is not connected yet. Email ${site.waitlistContact} and you will be added by hand.`,
+      message: 'The waitlist is not connected yet. Email us and you will be added by hand.',
+      contact: site.waitlistContact,
+      email,
+      attempt,
     };
   }
 
@@ -62,20 +93,45 @@ export async function joinWaitlist(
       },
       body: JSON.stringify({ email, source: 'sportscardpulse.app' }),
       cache: 'no-store',
+      // Without this a dead Supabase project leaves the button spinning until
+      // the platform's own timeout, which reads as a broken form.
+      signal: AbortSignal.timeout(TIMEOUT_MS),
     });
 
     // 409 is the unique index on lower(email) doing its job. From the reader's
     // point of view they are on the list, which is all they asked about.
     if (res.status === 409) {
-      return { status: 'ok', message: 'You are already on the list. We will be in touch.' };
+      return {
+        status: 'ok',
+        message: 'You are already on the list. We will be in touch.',
+        email,
+        attempt,
+      };
     }
 
     if (!res.ok) {
-      return { status: 'error', message: 'Something went wrong saving that. Try again shortly.' };
+      return {
+        status: 'error',
+        message: 'Something went wrong saving that. Try again shortly.',
+        contact: site.waitlistContact,
+        email,
+        attempt,
+      };
     }
 
-    return { status: 'ok', message: 'You are on the list. We will email you when it ships.' };
+    return {
+      status: 'ok',
+      message: 'You are on the list. We will email you when it ships.',
+      email,
+      attempt,
+    };
   } catch {
-    return { status: 'error', message: 'Could not reach the server. Try again shortly.' };
+    return {
+      status: 'error',
+      message: 'Could not reach the server. Check your connection and try again.',
+      contact: site.waitlistContact,
+      email,
+      attempt,
+    };
   }
 }

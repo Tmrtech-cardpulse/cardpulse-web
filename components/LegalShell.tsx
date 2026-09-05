@@ -18,7 +18,7 @@ export default function LegalShell({
   return (
     <>
       <Header />
-      <main className="mx-auto max-w-[760px] px-5 pt-28 pb-24 sm:px-8">
+      <main id="main" className="mx-auto max-w-[760px] px-5 pt-28 pb-24 sm:px-8">
         <h1 className="display" style={{ fontSize: 'clamp(30px, 4vw, 42px)' }}>
           {title}
         </h1>

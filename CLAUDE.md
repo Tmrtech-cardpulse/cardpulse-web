@@ -232,14 +232,42 @@ instead. It does not pretend to have stored the address.
 
 ## Contrast
 
-Two values in the inherited palette fail WCAG AA and the site works around both:
+Every text colour on the site now clears WCAG AA against the ground it sits on. Measured, on
+`--c-bg`: text 19.32:1, secondary 6.14:1, muted 5.66:1, accent 6.26:1, danger 5.67:1, success
+9.56:1. Secondary on `--c-surface` is 5.58:1 and on `--c-elevated` 4.99:1.
 
-- `--c-text-muted` measures **2.67:1** on the page ground. It fails AA at every size, so it is not
-  used for text anywhere on this site. Tertiary information gets its hierarchy from size and case
-  instead, on `--c-text-secondary` (6.14:1).
-- White on `--c-accent` measures **3.84:1**, short of the 4.5 that normal-size text needs. Filled
-  controls use `--c-accent-ink` instead, which is the near-black ground and measures **5.04:1**
-  against the same blue. The brand hex is unchanged.
+One rule survives the correction:
 
-The app has the same two problems in `../cardpulse/src/theme/index.ts` and has not been changed.
-`accentInk` was added there additively and is available whenever the app wants it.
+- White on `--c-accent` measures **3.08:1** and fails at normal size. Filled controls use
+  `--c-accent-ink`, the near-black ground, which measures **6.26:1** against the same blue. `.cta`,
+  `.skip-link` and `::selection` all take it. `--c-accent-fill` is the darker blue for the opposite
+  case, white on a fill, at 5.10:1.
+
+`--c-text-muted` used to measure 2.67:1 and was banned from text for it. The palette correction in
+`../cardpulse/src/theme/index.ts` moved it to `#828AA8`, which is 5.66:1, so the ban has lapsed.
+The site still gives tertiary information its hierarchy from size and case on `--c-text-secondary`,
+because that is a typographic decision rather than a workaround.
+
+The four legal and support pages were the last holdouts: each carried its own palette in literal
+hexes and so froze at the pre-correction values, including `#52566B` at 2.67:1 for the copyright
+line and a brand blue two revisions out of date. They now read from the tokens like everything else.
+
+## Things that are easy to undo by accident
+
+- **`.prose-legal` sets the measure, not just the type.** Body copy is `--t-body` capped at `68ch`
+  on the wrapper. It was `--t-body-sm` in a 760px column, which measured about 95 characters a line.
+  The cap sits on the wrapper so headings, lists and note panels share one column edge.
+- **`.prose-legal a` is scoped to `a:not([class])`.** Unscoped it measures (0,1,1) and beats `.cta`
+  at (0,1,0) in the same layer, which painted the accent link colour onto the accent button ground
+  and rendered the account deletion control as a blank blue block.
+- **The hero headline is sized in `cqw` against `.hero-copy`, not in `vw`.** Sized against the
+  viewport it rendered as four lines at 320, 360, 1024 and 1100, because the `lg` grid hands 460px
+  of the row to the tape exactly where the viewport sum says the type should be near maximum. It is
+  written as two lines and must render as two. The `vw` clamp is kept first as the fallback.
+- **`[id] { scroll-margin-top: 88px }`.** The header is fixed. Without it every in-page anchor lands
+  under the bar.
+- **`verify:articles` checks dashes in `app/`, `components/`, `lib/` and `content/` source, not only
+  in the content modules.** The rule held perfectly in fifty posts while the privacy policy shipped
+  five em-dashes in JSX.
+- **`app/not-found.tsx` is a real page.** Thirty-odd posts are scheduled and 404 by design at any
+  moment, so this is a destination, not an edge case. `npm run shoot` photographs it.

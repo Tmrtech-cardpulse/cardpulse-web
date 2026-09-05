@@ -14,7 +14,7 @@ import Image from 'next/image';
  */
 export default function PhotoBand() {
   return (
-    <section aria-hidden="false" className="relative">
+    <section className="relative">
       <div className="relative h-[280px] w-full overflow-hidden sm:h-[360px] lg:h-[420px]">
         <Image
           src="/photo/cards-fanned.jpg"

@@ -14,6 +14,9 @@ const VIEWPORTS = [
   { name: 'desktop', width: 1440, height: 1000 },
   { name: 'tablet', width: 834, height: 1100 },
   { name: 'mobile', width: 390, height: 844 },
+  // The narrowest phone still in use. Everything above it is a wider version
+  // of the same layout, so a break that only shows here shows nowhere else.
+  { name: 'small', width: 360, height: 780 },
 ];
 
 const ROUTES = [
@@ -24,6 +27,12 @@ const ROUTES = [
   { name: 'blog', path: '/blog' },
   { name: 'post', path: '/blog/what-is-my-sports-card-worth' },
   { name: 'privacy', path: '/privacy' },
+  { name: 'terms', path: '/terms' },
+  { name: 'support', path: '/support' },
+  { name: 'delete', path: '/delete-account' },
+  // The 404 is a real destination here: thirty-odd posts are scheduled and
+  // 404 by design until their date, so it needs shooting like any other page.
+  { name: 'notfound', path: '/this-route-does-not-exist' },
 ];
 
 (async () => {
@@ -39,7 +48,8 @@ const ROUTES = [
     for (const route of ROUTES) {
       const url = `${BASE}${route.path}`;
       const res = await page.goto(url, { waitUntil: 'load', timeout: 20000 }).catch(() => null);
-      if (!res || !res.ok()) {
+      const expected = route.name === 'notfound' ? 404 : 200;
+      if (!res || res.status() !== expected) {
         console.log(`skip ${route.name} @ ${vp.name} (${res ? res.status() : 'no response'})`);
         continue;
       }

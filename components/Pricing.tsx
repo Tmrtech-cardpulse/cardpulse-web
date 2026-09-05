@@ -5,7 +5,10 @@ import { pricing } from '@/lib/site';
 
 const FREE = [
   `Up to ${pricing.freeCardLimit} cards in your collection`,
-  `${pricing.freeScanLimit} free AI card scan, so you can see it work`,
+  // "in total" because the allowance is a lifetime one, not a monthly one, and
+  // a plan labelled "£0 forever" invites the other reading. Pluralised rather
+  // than written out, so raising the limit does not leave a grammar bug.
+  `${pricing.freeScanLimit} AI card ${pricing.freeScanLimit === 1 ? 'scan' : 'scans'} in total, so you can see it work`,
   'Add cards by hand or by eBay title, with no scan limit',
   'eBay active listing prices',
   'Discover: news, releases and events',

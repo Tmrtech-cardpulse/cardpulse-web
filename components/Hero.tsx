@@ -10,11 +10,8 @@ export default function Hero() {
   return (
     <section className="px-5 pt-24 pb-16 sm:px-8 lg:pb-24">
       <div className="mx-auto grid max-w-[1180px] items-center gap-12 lg:grid-cols-[1fr_460px] lg:gap-16">
-        <div>
-          <h1
-            className="display"
-            style={{ fontSize: 'clamp(40px, 6vw, 64px)' }}
-          >
+        <div className="hero-copy">
+          <h1 className="display hero-headline">
             Know what your cards
             <br />
             are <span style={{ color: 'var(--c-accent)' }}>actually</span> worth.

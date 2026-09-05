@@ -21,7 +21,7 @@ export default function GuidesPage() {
   return (
     <>
       <Header />
-      <main className="mx-auto max-w-[1180px] px-5 pt-28 pb-24 sm:px-8">
+      <main id="main" className="mx-auto max-w-[1180px] px-5 pt-28 pb-24 sm:px-8">
         <h1 className="display" style={{ fontSize: 'clamp(32px, 4.5vw, 48px)' }}>
           Guides
         </h1>

@@ -1,11 +1,12 @@
 'use client';
 
-import { useActionState } from 'react';
+import { CheckCircle } from '@phosphor-icons/react/ssr';
+import { useActionState, useEffect, useRef } from 'react';
 import { useFormStatus } from 'react-dom';
 
 import { joinWaitlist, type WaitlistState } from '@/app/actions/waitlist';
 
-const initial: WaitlistState = { status: 'idle' };
+const initial: WaitlistState = { status: 'idle', attempt: 0 };
 
 function Submit() {
   const { pending } = useFormStatus();
@@ -13,7 +14,8 @@ function Submit() {
     <button
       type="submit"
       disabled={pending}
-      className="cta px-6 py-3 text-[15px] disabled:opacity-60"
+      aria-busy={pending}
+      className="cta justify-center px-6 py-3 text-[15px] disabled:cursor-progress disabled:opacity-60"
     >
       {pending ? 'Adding you' : 'Join the waitlist'}
     </button>
@@ -22,6 +24,14 @@ function Submit() {
 
 export default function Waitlist() {
   const [state, action] = useActionState(joinWaitlist, initial);
+  const confirmed = useRef<HTMLDivElement>(null);
+
+  // The form is removed from the tree on success, which would drop focus to
+  // the body and leave a keyboard reader at the top of the document. Move it
+  // onto the confirmation instead, which is also what gets announced.
+  useEffect(() => {
+    if (state.status === 'ok') confirmed.current?.focus();
+  }, [state.status, state.attempt]);
 
   return (
     <section id="waitlist" className="px-5 py-16 sm:px-8 lg:py-24">
@@ -40,28 +50,68 @@ export default function Waitlist() {
             </p>
           </div>
 
+          {/* The live region is always in the tree and never swaps out. One
+              that is inserted at the same moment as its text is unreliable:
+              several screen readers only announce changes to a region that was
+              already there to change. */}
+          <p aria-live="polite" aria-atomic="true" className="sr-only">
+            {state.message ?? ''}
+          </p>
+
           {state.status === 'ok' ? (
-            <p
-              className="text-[15px] font-medium"
-              role="status"
-              style={{ color: 'var(--c-success)' }}
+            <div
+              ref={confirmed}
+              tabIndex={-1}
+              className="grid gap-3 outline-none"
+              style={{ borderTop: 'var(--web-hairline)', paddingTop: '1.25rem' }}
             >
-              {state.message}
-            </p>
+              <CheckCircle
+                size={26}
+                weight="fill"
+                color="var(--c-accent)"
+                aria-hidden
+              />
+              <p className="text-[17px] font-semibold leading-snug">{state.message}</p>
+              {state.email && (
+                <p className="mono text-[13px]" style={{ color: 'var(--c-text-secondary)' }}>
+                  {state.email}
+                </p>
+              )}
+            </div>
           ) : (
             <form action={action} className="grid gap-2">
               <label htmlFor="waitlist-email" className="text-[13px] font-medium">
                 Email address
               </label>
-              <div className="flex flex-wrap gap-2.5">
+              {/* Grid, not a wrapping flex row. `flex-1` gives the input a
+                  basis of zero, so it shrank to fit alongside the button
+                  instead of ever wrapping: at 360px the field was about ninety
+                  pixels wide and showed six characters of the address being
+                  typed into it. Stacked below 640, side by side above. */}
+              <div className="grid gap-2.5 sm:grid-cols-[1fr_auto]">
                 <input
+                  // Keyed on the attempt so a rejected address is put back.
+                  // React resets the form once the action returns, and a
+                  // changed defaultValue alone does not survive that.
+                  key={state.attempt}
+                  defaultValue={state.email ?? ''}
                   id="waitlist-email"
                   name="email"
                   type="email"
+                  inputMode="email"
                   required
                   autoComplete="email"
-                  aria-describedby="waitlist-help"
-                  className="min-w-0 flex-1 rounded-[var(--r-md)] px-4 py-3 text-[15px] outline-none"
+                  spellCheck={false}
+                  autoCapitalize="off"
+                  placeholder="you@example.com"
+                  // aria-describedby rather than aria-errormessage: the
+                  // latter is still unevenly supported, and this reads the
+                  // failure out with the help text either way.
+                  aria-describedby={
+                    state.status === 'error' ? 'waitlist-error waitlist-help' : 'waitlist-help'
+                  }
+                  aria-invalid={state.status === 'error' || undefined}
+                  className="min-w-0 rounded-[var(--r-md)] px-4 py-3 text-[15px] outline-none"
                   style={{
                     backgroundColor: 'var(--c-bg)',
                     border: 'var(--web-hairline)',
@@ -78,8 +128,20 @@ export default function Waitlist() {
                 One email. No newsletter, and you can reply to be removed.
               </p>
               {state.status === 'error' && (
-                <p className="text-[13px]" role="alert" style={{ color: 'var(--c-danger)' }}>
+                <p id="waitlist-error" className="text-[13px]" style={{ color: 'var(--c-danger)' }}>
                   {state.message}
+                  {state.contact && (
+                    <>
+                      {' '}
+                      <a
+                        href={`mailto:${state.contact}?subject=SportsCardPulse waitlist`}
+                        className="mono underline"
+                        style={{ color: 'var(--c-accent)', textUnderlineOffset: 2 }}
+                      >
+                        {state.contact}
+                      </a>
+                    </>
+                  )}
                 </p>
               )}
             </form>

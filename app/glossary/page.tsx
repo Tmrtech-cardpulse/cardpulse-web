@@ -37,7 +37,7 @@ export default function GlossaryPage() {
       <Header />
       <JsonLd data={glossaryLd()} />
 
-      <main className="mx-auto max-w-[880px] px-5 pt-28 pb-24 sm:px-8">
+      <main id="main" className="mx-auto max-w-[880px] px-5 pt-28 pb-24 sm:px-8">
         <h1 className="display" style={{ fontSize: 'clamp(32px, 4.5vw, 48px)' }}>
           Sports card glossary
         </h1>

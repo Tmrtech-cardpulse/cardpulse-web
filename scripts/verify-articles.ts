@@ -200,6 +200,23 @@ for (const slug of postSlugs) {
           fail(file.replace(/\\/g, '/'), `imports outside the repo: ${m[1]}`);
         }
       }
+
+      // 12. The dash rule, applied to component copy as well as to content.
+      //
+      //     The checks above only ever read the content modules, so the rule
+      //     held perfectly in fifty posts and five guides while the privacy
+      //     policy shipped five em-dashes and the support page an en-dash, in
+      //     JSX, visible on the page. Whole-file rather than string-only: no
+      //     dash belongs in this repo at all, and a check that has to parse
+      //     JSX to decide is a check that will be wrong quietly.
+      const dash = src.split(String.fromCharCode(10)).findIndex((l) => /[—–]/.test(l));
+      if (dash !== -1) {
+        const line = src.split(String.fromCharCode(10))[dash];
+        fail(
+          file.replace(/\\/g, '/'),
+          `line ${dash + 1} contains an em or en dash: ${line.trim().slice(0, 80)}`,
+        );
+      }
     }
   }
 }

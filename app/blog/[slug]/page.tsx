@@ -79,7 +79,7 @@ export default async function BlogPostPage({ params }: Params) {
       />
       {post.faqs && <JsonLd data={faqLd(post.faqs)} />}
 
-      <main className="mx-auto max-w-[760px] px-5 pt-28 pb-24 sm:px-8">
+      <main id="main" className="mx-auto max-w-[760px] px-5 pt-28 pb-24 sm:px-8">
         <nav aria-label="Breadcrumb">
           <Link
             href="/blog"
@@ -113,7 +113,7 @@ export default async function BlogPostPage({ params }: Params) {
                   <dt className="text-[16px] font-semibold">{f.q}</dt>
                   <dd
                     className="mt-2 max-w-[62ch] leading-relaxed"
-                    style={{ color: 'var(--c-text-secondary)', fontSize: 'var(--t-body-sm)' }}
+                    style={{ color: 'var(--c-text-secondary)', fontSize: 'var(--t-body)' }}
                   >
                     {f.a}
                   </dd>

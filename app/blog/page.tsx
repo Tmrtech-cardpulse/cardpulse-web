@@ -20,6 +20,14 @@ export const metadata: Metadata = pageMeta({
  */
 export const revalidate = 3600;
 
+/** The index is grouped by cluster rather than by date, so each row has to
+ *  carry its own date or the reader cannot tell what is new. Short form,
+ *  because the column also holds the reading time. */
+const shortDate = (iso: string) =>
+  new Intl.DateTimeFormat('en-GB', { day: 'numeric', month: 'short', year: 'numeric' }).format(
+    new Date(iso),
+  );
+
 export default function BlogPage() {
   const posts = publishedPosts();
   const clusters = activeClusters();
@@ -28,7 +36,7 @@ export default function BlogPage() {
   return (
     <>
       <Header />
-      <main className="mx-auto max-w-[1180px] px-5 pt-28 pb-24 sm:px-8">
+      <main id="main" className="mx-auto max-w-[1180px] px-5 pt-28 pb-24 sm:px-8">
         <h1 className="display" style={{ fontSize: 'clamp(32px, 4.5vw, 48px)' }}>
           Blog
         </h1>
@@ -52,7 +60,11 @@ export default function BlogPage() {
               {latest.summary}
             </p>
             <p className="mono mt-5 text-[13px]" style={{ color: 'var(--c-text-secondary)' }}>
-              {CLUSTER_LABEL[latest.cluster]}. {readingMinutes(latest.blocks)} min read.
+              {CLUSTER_LABEL[latest.cluster]}.{' '}
+              <time dateTime={latest.published} data-date>
+                {shortDate(latest.published)}
+              </time>
+              . {readingMinutes(latest.blocks)} min read.
             </p>
           </Link>
         )}
@@ -86,10 +98,13 @@ export default function BlogPage() {
                         </p>
                       </div>
                       <span
-                        className="mono shrink-0 text-[13px]"
+                        className="mono shrink-0 text-[13px] md:text-right"
                         style={{ color: 'var(--c-text-secondary)' }}
                       >
-                        {readingMinutes(p.blocks)} min
+                        <time dateTime={p.published} data-date>
+                          {shortDate(p.published)}
+                        </time>
+                        <span className="md:block"> {readingMinutes(p.blocks)} min</span>
                       </span>
                     </Link>
                   </li>

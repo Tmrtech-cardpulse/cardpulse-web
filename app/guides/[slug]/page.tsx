@@ -64,7 +64,7 @@ export default async function GuidePage({ params }: Params) {
       />
       {guide.faqs && <JsonLd data={faqLd(guide.faqs)} />}
 
-      <main className="mx-auto max-w-[760px] px-5 pt-28 pb-24 sm:px-8">
+      <main id="main" className="mx-auto max-w-[760px] px-5 pt-28 pb-24 sm:px-8">
         <nav aria-label="Breadcrumb">
           <Link
             href="/guides"
@@ -104,7 +104,7 @@ export default async function GuidePage({ params }: Params) {
                   <dt className="text-[16px] font-semibold">{f.q}</dt>
                   <dd
                     className="mt-2 max-w-[62ch] leading-relaxed"
-                    style={{ color: 'var(--c-text-secondary)', fontSize: 'var(--t-body-sm)' }}
+                    style={{ color: 'var(--c-text-secondary)', fontSize: 'var(--t-body)' }}
                   >
                     {f.a}
                   </dd>

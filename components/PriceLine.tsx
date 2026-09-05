@@ -1,4 +1,4 @@
-import type { Comp } from '@/lib/exampleCard';
+import { formatGbp, type Comp } from '@/lib/exampleCard';
 
 /**
  * The comp line.
@@ -45,6 +45,15 @@ export default function PriceLine({
   });
 
   const line = pts.map(([x, y]) => `${x.toFixed(2)},${y.toFixed(2)}`).join(' ');
+
+  // The label is read instead of the chart, so it has to describe this data
+  // rather than the shape the data happened to have when it was written. The
+  // old one said "rising" unconditionally and compared the lowest price to the
+  // last one, which is two different claims spliced together. Currency comes
+  // from the fixture's formatter for the same reason every other figure does.
+  const first = prices[0];
+  const last = prices[prices.length - 1];
+  const direction = last > first ? 'rising' : last < first ? 'falling' : 'flat';
   const area = `0,30 ${line} 100,30`;
   const [lastX, lastY] = pts[pts.length - 1];
 
@@ -62,7 +71,7 @@ export default function PriceLine({
       height={height}
       className="w-full"
       role="img"
-      aria-label={`Sold prices over the last ${comps.length} sales, rising from £${min} to £${prices[prices.length - 1]}.`}
+      aria-label={`Sold prices over the last ${comps.length} sales, ${direction} from ${formatGbp(first)} to ${formatGbp(last)}.`}
     >
       <defs>
         <linearGradient id={`tape-fill-${gradientId}`} x1="0" y1="0" x2="0" y2="1">

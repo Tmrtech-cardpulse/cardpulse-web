@@ -59,7 +59,7 @@ export default function AuthCallbackPage() {
 
 function Page({ Glyph, heading, body }: { Glyph: Icon; heading: string; body: string }) {
   return (
-    <main className="flex min-h-[100dvh] flex-col items-center justify-center px-6 text-center">
+    <main id="main" className="flex min-h-[100dvh] flex-col items-center justify-center px-6 text-center">
       <Glyph size={32} color="var(--c-accent)" weight="regular" />
       <h1 className="display mt-6" style={{ fontSize: 'var(--t-heading-lg)' }}>
         {heading}

@@ -32,7 +32,7 @@ export default function Header() {
             <Link
               key={item.href}
               href={item.href}
-              className="text-[14px] transition-colors hover:text-[var(--c-text)]"
+              className="py-2 text-[14px] transition-colors hover:text-[var(--c-text)]"
               style={{ color: 'var(--c-text-secondary)' }}
             >
               {item.label}

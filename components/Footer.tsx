@@ -17,7 +17,7 @@ export default function Footer() {
           </p>
           <a
             href={`mailto:${site.contact}`}
-            className="mono mt-4 inline-block text-[13px] transition-colors hover:text-[var(--c-text)]"
+            className="mono mt-3 inline-block py-1.5 text-[13px] transition-colors hover:text-[var(--c-text)]"
             style={{ color: 'var(--c-text-secondary)' }}
           >
             {site.contact}
@@ -28,12 +28,12 @@ export default function Footer() {
           {footerNav.map((group) => (
             <div key={group.heading}>
               <p className="col-label">{group.heading}</p>
-              <ul className="mt-3 grid gap-2.5">
+              <ul className="mt-2 grid gap-0.5">
                 {group.links.map((l) => (
                   <li key={l.href}>
                     <Link
                       href={l.href}
-                      className="text-[14px] transition-colors hover:text-[var(--c-text)]"
+                      className="inline-block py-1.5 text-[14px] transition-colors hover:text-[var(--c-text)]"
                       style={{ color: 'var(--c-text-secondary)' }}
                     >
                       {l.label}
