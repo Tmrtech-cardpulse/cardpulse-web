@@ -21,9 +21,13 @@ export const site = {
 } as const;
 
 /** Pricing, stated once. The free card limit is enforced by a database trigger
- *  in the app repo (`enforce_free_card_limit`), so this number is not decorative. */
+ *  in the app repo (`enforce_free_card_limit`), so this number is not decorative.
+ *  The scan limit is `FREE_SCAN_LIMIT` in the app repo's `identify-card` edge
+ *  function. It is a LIFETIME allowance, not a monthly one, and it applies only
+ *  to image scans: manual entry and eBay title lookup are not capped. */
 export const pricing = {
   freeCardLimit: 50,
+  freeScanLimit: 1,
   monthly: '£8.49',
   yearly: '£89.99',
 } as const;

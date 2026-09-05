@@ -4,8 +4,8 @@ export const colors = {
   "surface": "#161827",
   "elevated": "#1E2236",
   "border": "#252A45",
-  "accent": "#3D7BFF",
-  "accentMuted": "rgba(61,123,255,0.15)",
+  "accent": "#5A8FFF",
+  "accentMuted": "rgba(90,143,255,0.15)",
   "accentHot": "#FF4D8F",
   "accentHotMuted": "rgba(255,77,143,0.15)",
   "text": "#FFFFFF",
@@ -13,5 +13,7 @@ export const colors = {
   "textMuted": "#828AA8",
   "danger": "#FF453A",
   "success": "#30D158",
-  "accentInk": "#0B0D1A"
+  "successMuted": "rgba(48,209,88,0.125)",
+  "accentInk": "#0B0D1A",
+  "accentFill": "#3468D8"
 } as const;

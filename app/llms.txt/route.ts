@@ -1,7 +1,7 @@
 import { glossary } from '@/content/glossary';
 import { guides } from '@/content/guides';
 import { publishedPosts } from '@/content/posts';
-import { site } from '@/lib/site';
+import { pricing, site } from '@/lib/site';
 
 /**
  * llms.txt. A plain-text map of what is on this site, for models that read one.
@@ -31,9 +31,10 @@ export function GET() {
     '',
     '## About the product',
     '',
-    '- Free tier: up to 50 cards, eBay active listing prices, release news.',
-    '- Premium: unlimited cards, AI card scanning, sold prices, portfolio profit and loss,',
-    '  target price alerts and a per-card Pulse Score.',
+    `- Free tier: up to ${pricing.freeCardLimit} cards, ${pricing.freeScanLimit} free AI card scan, and manual or`,
+    '  eBay-title card entry with no scan limit. eBay active listing prices, release news.',
+    '- Premium: unlimited cards, unlimited AI card scanning, sold prices, portfolio profit and',
+    '  loss, target price alerts and a per-card Pulse Score.',
     '',
     '## Legal',
     '',

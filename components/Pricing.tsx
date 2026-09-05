@@ -5,10 +5,11 @@ import { pricing } from '@/lib/site';
 
 const FREE = [
   `Up to ${pricing.freeCardLimit} cards in your collection`,
+  `${pricing.freeScanLimit} free AI card scan, so you can see it work`,
+  'Add cards by hand or by eBay title, with no scan limit',
   'eBay active listing prices',
   'Discover: news, releases and events',
   'New release notifications',
-  'Manual card entry',
 ];
 
 const PREMIUM = [
