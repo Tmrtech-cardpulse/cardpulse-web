@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import { Archivo, IBM_Plex_Mono } from 'next/font/google';
+import { Archivo, IBM_Plex_Mono, Poppins } from 'next/font/google';
 import { Analytics } from '@vercel/analytics/next';
 
 import JsonLd from '@/components/JsonLd';
@@ -25,6 +25,17 @@ const plexMono = IBM_Plex_Mono({
   display: 'swap',
 });
 
+/* Poppins is the APP's typeface, not the site's. It is loaded for one reason:
+   the device frames in AppScreens depict real app screens, and a depiction set
+   in the site's own face is not a depiction, it is a site component shaped like
+   a phone. Scoped to --font-poppins and used nowhere outside those frames. */
+const poppins = Poppins({
+  subsets: ['latin'],
+  weight: ['500', '700', '800'],
+  variable: '--font-poppins',
+  display: 'swap',
+});
+
 export const metadata: Metadata = {
   metadataBase: new URL(site.url),
   ...pageMeta({
@@ -36,7 +47,7 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en-GB" className={`${archivo.variable} ${plexMono.variable}`}>
+    <html lang="en-GB" className={`${archivo.variable} ${plexMono.variable} ${poppins.variable}`}>
       <body>
         {/* Every page opens with a fixed header carrying five links. Without
             this a keyboard reader tabs through the whole nav on each one. */}

@@ -1,3 +1,4 @@
+import AppScreens from '@/components/AppScreens';
 import Footer from '@/components/Footer';
 import Header from '@/components/Header';
 import Hero from '@/components/Hero';
@@ -18,6 +19,7 @@ export default function Home() {
         <SoldNotAsking />
         <PhotoBand />
         <HowItWorks />
+        <AppScreens />
         <PulseScore />
         <Honesty />
         <Pricing />
