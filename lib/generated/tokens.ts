@@ -15,5 +15,8 @@ export const colors = {
   "success": "#30D158",
   "successMuted": "rgba(48,209,88,0.125)",
   "accentInk": "#0B0D1A",
-  "accentFill": "#3468D8"
+  "accentFill": "#3468D8",
+  "premium": "#E8C57A",
+  "premiumInk": "#0B0D1A",
+  "premiumMuted": "rgba(232,197,122,0.15)"
 } as const;
