@@ -44,7 +44,11 @@ export default function BlogPage() {
           className="mt-4 max-w-[58ch] leading-relaxed"
           style={{ color: 'var(--c-text-secondary)', fontSize: 'var(--t-body-lg)' }}
         >
-          Answers to the things collectors actually ask, written for the UK market.
+          Answers to the things collectors actually ask, written for the UK market.{' '}
+          <Link href="/blog/about" className="underline">
+            How this is written
+          </Link>
+          .
         </p>
 
         {latest && (
@@ -78,8 +82,16 @@ export default function BlogPage() {
 
           return (
             <section key={cluster} className="mt-16">
+              {/* The heading is a link to the hub, which is what makes the hub
+                  reachable and the cluster a real structure rather than a way
+                  of sorting this page. */}
               <h2 className="text-[20px] font-semibold tracking-tight">
-                {CLUSTER_LABEL[cluster]}
+                <Link
+                  href={`/blog/c/${cluster}`}
+                  className="transition-colors hover:text-[var(--c-accent)]"
+                >
+                  {CLUSTER_LABEL[cluster]}
+                </Link>
               </h2>
               <ul className="mt-5" style={{ borderTop: 'var(--web-hairline)' }}>
                 {inCluster.map((p) => (

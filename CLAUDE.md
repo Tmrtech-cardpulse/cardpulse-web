@@ -100,6 +100,17 @@ a thin programmatic page, which is the shape of a spam farm and is treated as on
 Fifty posts across seven clusters in `content/posts/`, one file per cluster so the cluster structure
 is visible in the file tree.
 
+**Every cluster has a hub at `/blog/c/{cluster}`**, defined in `content/clusters.ts`. A hub is not a
+listing: it carries its own intro copy, links down to the pillar guide in that copy rather than only
+in a card, and is what the posts link up to from their byline. `verify:articles` enforces a floor on
+the intro length and the same description bounds as a post, because a thin page in the middle of a
+cluster is worse than no page at all: everything below it points at it.
+
+`content/calendar.ts` holds what is commissioned and not yet written, and only that. The posts are
+the record of what exists, so a slot is deleted the moment its post is written, and the verify
+script fails the build if a slot and a post share a slug or a date. `/blog/about` is the editorial
+standards page and names the next few subjects without dates.
+
 **They are released on a schedule, and the mechanism is load-bearing.** Fifty pages appearing on one
 day is the signature of scaled content abuse under Google's spam policies regardless of who wrote
 them or how good they are. `publishedPosts()` filters on the `published` date, the blog routes set

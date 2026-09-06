@@ -1,7 +1,8 @@
 import type { MetadataRoute } from 'next';
 
+import { CLUSTER_ORDER } from '@/content/clusters';
 import { guides } from '@/content/guides';
-import { publishedPosts } from '@/content/posts';
+import { postsInCluster, publishedPosts } from '@/content/posts';
 import { site } from '@/lib/site';
 
 /**
@@ -13,6 +14,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: site.url, changeFrequency: 'weekly', priority: 1 },
     { url: `${site.url}/guides`, changeFrequency: 'weekly', priority: 0.8 },
     { url: `${site.url}/blog`, changeFrequency: 'weekly', priority: 0.8 },
+    { url: `${site.url}/blog/about`, changeFrequency: 'monthly', priority: 0.4 },
     { url: `${site.url}/glossary`, changeFrequency: 'monthly', priority: 0.7 },
     { url: `${site.url}/support`, changeFrequency: 'yearly', priority: 0.4 },
     { url: `${site.url}/privacy`, changeFrequency: 'yearly', priority: 0.3 },
@@ -36,5 +38,17 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority: 0.5,
   }));
 
-  return [...staticRoutes, ...guideRoutes, ...postRoutes];
+  /* A hub whose posts are all still scheduled is a real page: it carries its
+     own copy and, usually, the guide that owns the topic. But one with nothing
+     published and no guide is a heading and a paragraph, so it stays out of the
+     sitemap until it has something to be the top of. */
+  const clusterRoutes: MetadataRoute.Sitemap = CLUSTER_ORDER.filter(
+    (c) => postsInCluster(c).length > 0,
+  ).map((c) => ({
+    url: `${site.url}/blog/c/${c}`,
+    changeFrequency: 'weekly',
+    priority: 0.7,
+  }));
+
+  return [...staticRoutes, ...guideRoutes, ...clusterRoutes, ...postRoutes];
 }

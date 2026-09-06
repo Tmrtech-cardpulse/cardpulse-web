@@ -9,10 +9,12 @@
 import { readdirSync, readFileSync, statSync } from 'node:fs';
 import { join } from 'node:path';
 
+import { PLANNED } from '../content/calendar';
+import { CLUSTER_HUBS, CLUSTER_ORDER } from '../content/clusters';
 import { glossary } from '../content/glossary';
 import { guides } from '../content/guides';
 import { allPosts } from '../content/posts';
-import { plainText, type Block } from '../content/types';
+import { CLUSTER_LABEL, plainText, type Block } from '../content/types';
 
 const failures: string[] = [];
 const fail = (where: string, msg: string) => failures.push(`${where}: ${msg}`);
@@ -27,6 +29,8 @@ const ROUTES = new Set<string>([
   '/support',
   '/delete-account',
   '/blog',
+  '/blog/about',
+  ...CLUSTER_ORDER.map((c) => `/blog/c/${c}`),
   ...guides.map((g) => `/guides/${g.slug}`),
   ...allPosts.map((p) => `/blog/${p.slug}`),
 ]);
@@ -162,7 +166,93 @@ for (const post of allPosts) {
   }
 }
 
-// 10. Slugs unique across posts, and not colliding with a guide slug.
+// 10. Cluster hubs. Each one is a page in the middle of a cluster, so a thin
+//     one is worse than none: everything below it links up to it.
+for (const cluster of CLUSTER_ORDER) {
+  const where = `clusters/${cluster}`;
+  const hub = CLUSTER_HUBS[cluster];
+  const prose = plainTextWithLinks(hub.intro);
+  const everything = [hub.title, hub.metaTitle, hub.description, prose].join(
+    String.fromCharCode(10),
+  );
+
+  if (/[—–]/.test(everything)) {
+    const line = everything.split(String.fromCharCode(10)).find((l) => /[—–]/.test(l));
+    fail(where, `contains an em or en dash: ${line?.slice(0, 80)}`);
+  }
+
+  if (hub.description.length < 110 || hub.description.length > 175) {
+    fail(where, `description is ${hub.description.length} chars, wanted 110 to 175`);
+  }
+
+  // The floor that stops a hub being a heading with a sentence under it.
+  if (plainText(hub.intro).length < 320) {
+    fail(where, `intro is ${plainText(hub.intro).length} chars, wanted at least 320`);
+  }
+
+  for (const href of new Set(linksIn(hub.intro).map((h) => h.split('#')[0]))) {
+    if (!ROUTES.has(href)) fail(where, `intro links to a route that does not exist: ${href}`);
+  }
+
+  // A hub that names a pillar must link to it in its own copy, for the same
+  // reason a post must: a card at the top of the page is navigation.
+  if (hub.pillar) {
+    if (!guides.some((g) => `/guides/${g.slug}` === hub.pillar)) {
+      fail(where, `pillar route does not resolve to a guide: ${hub.pillar}`);
+    }
+    if (!linksIn(hub.intro).some((h) => h.split('#')[0] === hub.pillar)) {
+      fail(where, `names pillar ${hub.pillar} but does not link to it in the intro`);
+    }
+  }
+
+  // Every cluster a post can declare needs a hub, or the post links up to a 404.
+  if (!CLUSTER_LABEL[cluster]) fail(where, 'cluster has no label');
+}
+
+for (const post of allPosts) {
+  if (!CLUSTER_ORDER.includes(post.cluster)) {
+    fail(`posts/${post.slug}`, `cluster ${post.cluster} has no hub in CLUSTER_ORDER`);
+  }
+}
+
+// 11. The editorial calendar. It answers one question, which is what has been
+//     planned and not yet written, so a slot for something that now exists is
+//     not a harmless leftover: it is the file starting to disagree with the
+//     posts about what has been done.
+const plannedSlugs = PLANNED.map((s) => s.slug);
+if (new Set(plannedSlugs).size !== plannedSlugs.length) {
+  fail('content/calendar', 'duplicate planned slug');
+}
+const plannedDates = PLANNED.map((s) => s.date);
+if (new Set(plannedDates).size !== plannedDates.length) {
+  fail('content/calendar', 'two planned slots share a date');
+}
+for (const slot of PLANNED) {
+  const where = `calendar/${slot.slug}`;
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(slot.date)) {
+    fail(where, `date is not ISO yyyy-mm-dd: ${slot.date}`);
+  }
+  if (allPosts.some((p) => p.slug === slot.slug)) {
+    fail(where, 'slot describes a post that already exists, so remove the slot');
+  }
+  if (allPosts.some((p) => p.published === slot.date)) {
+    fail(where, `date collides with a post already dated ${slot.date}`);
+  }
+  if (!CLUSTER_ORDER.includes(slot.cluster)) {
+    fail(where, `cluster ${slot.cluster} has no hub`);
+  }
+  if (slot.brief.trim().length < 80) {
+    fail(where, 'brief is too short to be worth writing down');
+  }
+  if (/[—–]/.test(slot.brief)) fail(where, 'brief contains an em or en dash');
+  // A pillar slot for a cluster that already has one is a plan to write a
+  // second owner for a topic that has one.
+  if (slot.pillar && CLUSTER_HUBS[slot.cluster].pillar) {
+    fail(where, `plans a pillar for ${slot.cluster}, which already has ${CLUSTER_HUBS[slot.cluster].pillar}`);
+  }
+}
+
+// 12. Slugs unique across posts, and not colliding with a guide slug.
 const postSlugs = allPosts.map((p) => p.slug);
 if (new Set(postSlugs).size !== postSlugs.length) {
   const dupes = postSlugs.filter((s, i) => postSlugs.indexOf(s) !== i);
@@ -231,5 +321,6 @@ if (failures.length) {
 const live = allPosts.filter((p) => new Date(p.published) <= new Date()).length;
 console.log(
   `content ok: ${guides.length} guides, ${allPosts.length} posts (${live} live, ` +
-    `${allPosts.length - live} scheduled), ${glossary.length} glossary terms, all links resolve`,
+    `${allPosts.length - live} scheduled), ${CLUSTER_ORDER.length} cluster hubs, ` +
+    `${PLANNED.length} planned, ${glossary.length} glossary terms, all links resolve`,
 );

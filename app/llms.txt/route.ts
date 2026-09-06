@@ -1,3 +1,4 @@
+import { CLUSTER_HUBS, CLUSTER_ORDER } from '@/content/clusters';
 import { glossary } from '@/content/glossary';
 import { guides } from '@/content/guides';
 import { publishedPosts } from '@/content/posts';
@@ -20,6 +21,15 @@ export function GET() {
     '## Guides',
     '',
     ...guides.map((g) => `- [${g.title}](${site.url}/guides/${g.slug}): ${g.summary}`),
+    '',
+    '## Topics',
+    '',
+    // The hubs before the posts, because they are what the posts hang from and
+    // a reader arriving at the list wants the seven before the fifty.
+    ...CLUSTER_ORDER.map(
+      (c) => `- [${CLUSTER_HUBS[c].title}](${site.url}/blog/c/${c}): ${CLUSTER_HUBS[c].description}`,
+    ),
+    `- [How this blog is written](${site.url}/blog/about): the rules the articles are written under, what is deliberately not stated, and why they are released on a schedule.`,
     '',
     '## Blog',
     '',

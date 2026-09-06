@@ -74,6 +74,7 @@ export default async function BlogPostPage({ params }: Params) {
       <JsonLd
         data={breadcrumbLd([
           { label: 'Blog', href: '/blog' },
+          { label: CLUSTER_LABEL[post.cluster], href: `/blog/c/${post.cluster}` },
           { label: post.title, href: `/blog/${post.slug}` },
         ])}
       />
@@ -94,8 +95,16 @@ export default async function BlogPostPage({ params }: Params) {
           {post.title}
         </h1>
         <p className="mono mt-4 text-[13px]" style={{ color: 'var(--c-text-secondary)' }}>
-          {CLUSTER_LABEL[post.cluster]}. <time dateTime={post.published}>{published}</time>.{' '}
-          {readingMinutes(post.blocks)} min read.
+          {/* Up to the hub, from every post in the cluster. A post that only
+              reaches its topic through the blog index is filed, not linked. */}
+          <Link
+            href={`/blog/c/${post.cluster}`}
+            className="transition-colors hover:text-[var(--c-text)]"
+          >
+            {CLUSTER_LABEL[post.cluster]}
+          </Link>
+          . <time dateTime={post.published}>{published}</time>. {readingMinutes(post.blocks)} min
+          read.
         </p>
 
         <div className="mt-10">

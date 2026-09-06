@@ -46,7 +46,14 @@ site and is invisible from the browser.
   /guides/rookie-cards-explained
   /guides/how-to-spot-a-reprint
 /glossary                          Reference. Long tail by term.
-/blog/{slug}                       Supporting articles. Link UP to a pillar, in prose.
+/blog                              Index, grouped by cluster. Each heading links to its hub.
+  /blog/c/{cluster}                CLUSTER HUB. One per cluster, seven of them. Own intro copy,
+                                   the pillar guide, and every post in the cluster. This is the
+                                   URL the pillar and the posts both point at.
+  /blog/about                      Editorial standards. What the numbers are, what is deliberately
+                                   not stated, why the schedule exists, what is planned next.
+/blog/{slug}                       Supporting articles. Link UP to a pillar, in prose, and to the
+                                   cluster hub from the byline.
 /price/{card}                      BLOCKED on the backend. Do not build without data.
 ```
 
@@ -67,10 +74,17 @@ Owner is Claude unless a human is named. Status is one of `live`, `drafted`, `bl
 | Terminology | `/glossary` | glossary entries | `/#waitlist` | live |
 | Named card prices | `/price/{card}` | n/a | `/#waitlist` | **blocked** |
 
-Two clusters have no pillar yet (`selling`, `products`). That is deliberate and it is a known gap:
-a pillar should be written once the cluster below it exists and has shown which sub-topic actually
-carries the weight. Promoting a post to a pillar later is cheap. Writing a pillar for a topic you
-have not covered yet is guesswork.
+Three clusters have no pillar yet (`selling`, `products`, `care`). That is deliberate and it is a
+known gap: a pillar should be written once the cluster below it exists and has shown which sub-topic
+actually carries the weight. Promoting a post to a pillar later is cheap. Writing a pillar for a
+topic you have not covered yet is guesswork.
+
+All three now have a dated slot in `content/calendar.ts`, placed after enough of their supporting
+posts have run to write the pillar from what the cluster actually covers. A gap with a plan against
+it is a decision; a gap with nothing against it is something that was forgotten.
+
+Each hub says so on the page. A cluster with no guide carries a note explaining why rather than
+leaving a reader to notice the absence.
 
 ## Rules that hold across every topic
 
@@ -86,6 +100,16 @@ have not covered yet is guesswork.
   is worth today ages badly and cannot be verified, so posts describe method and mechanics instead.
 - **Nothing that reads as investment advice.** Cards are described as a market, never as an asset
   class to buy. This is a register, not a style preference.
+
+## The editorial calendar
+
+`content/calendar.ts` holds what is commissioned and not yet written, and nothing else. The posts
+are the record of what exists, so a slot is deleted the moment its post is written and
+`verify:articles` fails the build if a slot and a post ever share a slug, or if two slots share a
+date, or if a slot dates itself onto a day a post already occupies.
+
+Slots are never rendered to the public with their dates. `/blog/about` names the next few subjects
+without them, because a schedule published and then missed is worse than no schedule published.
 
 ## Publishing cadence
 
